@@ -12,40 +12,41 @@ import SwiftUI
 
 @Reducer
 struct HomeReducer {
-	
+
 	@Reducer(state: .equatable)
 	enum Path {
-		case eventdetails(EventDetailsReducer)
+		case eventDetails(EventDetailsReducer)
+		case pokemonDetails(PokemonDetailsReducer)
 	}
-	
+
 	@ObservableState
 	struct State: Equatable {
 		var topBar = HomeTopBarReducer.State()
 		var featuredEvent: FeaturedEventReducer.State?
 		var events: EventsListReducer.State?
 		var pokemons: PokemonsListReducer.State?
-		
+
 		var path = StackState<Path.State>()
-		
+
 		var isLoading = false
 	}
-	
+
 	enum Action {
 		case initialFetch
 		case topBar(HomeTopBarReducer.Action)
 		case featuredEvent(FeaturedEventReducer.Action)
 		case events(EventsListReducer.Action)
 		case pokemons(PokemonsListReducer.Action)
-		
+
 		case path(StackAction<Path.State, Path.Action>)
-		
+
 		case initialFetchResponse(Result<HomeResponse, Error>)
 	}
-	
+
 	@Dependency(\.repository) var repository
-	
+
 	var body: some ReducerOf<Self> {
-		
+
 		Reduce { state, action in
 			switch action {
 			case .initialFetch:
@@ -54,10 +55,10 @@ struct HomeReducer {
 					let result = await Result { try await repository.homeData() }
 					await send(.initialFetchResponse(result))
 				}
-				
+
 			case let .initialFetchResponse(result):
 				state.isLoading = false
-				
+
 				switch result {
 				case let .success(response):
 					state.featuredEvent = .init(event: response.featuredEvent)
@@ -73,28 +74,37 @@ struct HomeReducer {
 				case .failure:
 					return .none
 				}
-				
+
 			case let .topBar(.delegate(delegateAction)):
 				switch delegateAction {
 				case .loginButtonTapped:
 					return .none
 				}
-				
+
 			case let .events(.events(.element(_, action))):
 				switch action {
 				case let .delegate(.eventTapped(event)):
-					state.path.append(.eventdetails(EventDetailsReducer.State(event: event)))
+					state.path.append(.eventDetails(EventDetailsReducer.State(event: event)))
 					return .none
 				}
-				
+
 			case let .featuredEvent(.delegate(.eventTapped(event))):
-				state.path.append(.eventdetails(EventDetailsReducer.State(event: event)))
+				state.path.append(.eventDetails(EventDetailsReducer.State(event: event)))
 				return .none
-				
-			case .pokemons:
-				return .none
-				
+
+			case let .pokemons(.pokemons(.element(_, action))):
+				switch action {
+				case let .delegate(.pokemonTapped(pokemon)):
+					state.path.append(.pokemonDetails(PokemonDetailsReducer.State(pokemon: pokemon)))
+					return .none
+				case .delegate(.connectButtonTapped):
+					return .none
+				}
+
 			case .path:
+				return .none
+
+			case .pokemons:
 				return .none
 			}
 		}
@@ -109,14 +119,14 @@ struct HomeReducer {
 
 struct HomeView: View {
 	@Bindable var store: StoreOf<HomeReducer>
-	
+
 	var body: some View {
 		NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
 			VStack {
 				HomeTopBarView(store: store.scope(state: \.topBar,
 												  action: \.topBar))
 				.padding(.bottom, 16)
-				
+
 				ScrollView {
 					VStack(spacing: 32) {
 						if store.isLoading {
@@ -125,14 +135,14 @@ struct HomeView: View {
 									initialState: .init(event: .featured)) {
 										EmptyReducer()
 									})
-								
+
 								SectionView(title: "This Weak") {
 									EventsView(store: Store(
 										initialState: .init()) {
 											EmptyReducer()
 										})
 								}
-								
+
 								SectionView(title: "Popular Pokemons") {
 									PokemonsView(store: Store(
 										initialState: PokemonsListReducer.State()) {
@@ -145,13 +155,13 @@ struct HomeView: View {
 							if let store = store.scope(state: \.featuredEvent, action: \.featuredEvent) {
 								FeaturedEventView(store: store)
 							}
-							
+
 							if let store = store.scope(state: \.events, action: \.events) {
 								SectionView(title: "This Weak") {
 									EventsView(store: store)
 								}
 							}
-							
+
 							if let store = store.scope(state: \.pokemons, action: \.pokemons) {
 								SectionView(title: "Popular Pokemon") {
 									PokemonsView(store: store)
@@ -170,11 +180,13 @@ struct HomeView: View {
 			}
 		} destination: { store in
 			switch store.case {
-			case let .eventdetails(store):
+			case let .eventDetails(store):
 				EventDetailsView(store: store)
+			case let .pokemonDetails(store):
+				PokemonDetailsView(store: store)
 			}
 		}
-		
+
 	}
 }
 

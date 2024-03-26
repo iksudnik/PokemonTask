@@ -25,6 +25,7 @@ struct PokemonItemReducer {
 		@CasePathable
 		enum Delegate {
 			case connectButtonTapped
+			case pokemonTapped(Pokemon)
 		}
 	}
 
@@ -77,6 +78,9 @@ struct PokemonView: View {
 		.background {
 			RoundedRectangle(cornerRadius: 6)
 				.fill(.quaternary)
+		}
+		.onTapGesture {
+			store.send(.delegate(.pokemonTapped(store.pokemon)))
 		}
 	}
 }

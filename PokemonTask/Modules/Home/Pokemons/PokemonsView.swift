@@ -19,7 +19,7 @@ struct PokemonsListReducer {
 
 	enum Action {
 		case pokemons(IdentifiedActionOf<PokemonItemReducer>)
-		case updateIsConnected(Bool, Int32)
+		case updateIsConnected(Bool, Pokemon.ID)
 	}
 
 	@Dependency(\.repository) var repository
@@ -41,6 +41,8 @@ struct PokemonsListReducer {
 						try await repository.updatePokemonIsConnected(isConnected, id)
 						await send(.updateIsConnected(isConnected, id), animation: .smooth)
 					}
+				case .pokemonTapped:
+					return .none
 				}
 			case let .updateIsConnected(isConnected, id):
 				state.pokemons[id: id]?.pokemon.isConnected = isConnected
