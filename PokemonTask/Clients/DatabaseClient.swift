@@ -11,9 +11,9 @@ import CoreData
 
 @DependencyClient
 struct DatabaseClient {
-	var pokemones: @MainActor () async throws -> PokemonResponse
-	var savePokemons: @MainActor (PokemonResponse) async throws -> Void
-	var updatePokemonIsConnected: @MainActor (_ isConnected: Bool, _ id: Int) async throws -> Void
+	var pokemon: @MainActor (_ id: Int32) async throws -> Pokemon?
+	var savePokemon: @MainActor (Pokemon) async throws -> Void
+	var updatePokemonIsConnected: @MainActor (_ isConnected: Bool, _ id: Int32) async throws -> Void
 }
 
 enum DatabaseClientError: Error {
@@ -43,34 +43,20 @@ extension DatabaseClient: DependencyKey {
 		
 		return Self(
 			
-			pokemones: {
-				let pokemonesRequest = PokemonEntity.fetchRequest()
-				let sortDescriptor = NSSortDescriptor(keyPath: \PokemonEntity.id, ascending: true)
-				pokemonesRequest.sortDescriptors = [sortDescriptor]
-				let entities = try viewContext.fetch(pokemonesRequest)
-				
-				let downloadStateRequest = DownloadState.fetchRequest()
-				let downloadState = (try? viewContext.fetch(downloadStateRequest))?.first
-				
-				return .init(count: Int(downloadState?.maxCount ?? .max),
-							 next: downloadState?.nextUrl,
-							 results: entities.map { $0.toPokemon() })
+			pokemon: { id in
+				let request = PokemonEntity.fetchRequest()
+				request.predicate = NSPredicate(format: "id == %@", NSNumber(value: id))
+
+				let entities = try viewContext.fetch(request)
+
+				return entities.first?.toPokemon()
 			},
 			
-			savePokemons: { response in
+			savePokemon: { pokemon in
 				try await viewContext.perform {
-					for pokemon in response.results {
-						let entity = PokemonEntity(context: viewContext)
-						entity.update(from: pokemon)
-					}
-					
-					var downloadState = try viewContext.fetch(DownloadState.fetchRequest()).first
-					if downloadState == nil {
-						downloadState = DownloadState(context: viewContext)
-					}
-					downloadState?.maxCount = Int32(response.count)
-					downloadState?.nextUrl = response.next
-					
+					let entity = PokemonEntity(context: viewContext)
+					entity.update(from: pokemon)
+
 					try viewContext.save()
 				}
 			},
@@ -95,8 +81,8 @@ extension DatabaseClient: DependencyKey {
 
 extension DatabaseClient: TestDependencyKey {
 	static let previewValue = Self(
-		pokemones: { .mock},
-		savePokemons: { _ in },
+		pokemon: { _ in .bulbasaur },
+		savePokemon: { _ in },
 		updatePokemonIsConnected: { _,_ in }
 	)
 

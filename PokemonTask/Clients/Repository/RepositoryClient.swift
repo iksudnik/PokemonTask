@@ -10,10 +10,8 @@ import Foundation
 
 @DependencyClient
 struct Repository {
-	var pokemons: (PokemonsFetchType) async throws -> PokemonResponse
-	var updatePokemonIsConnected: (_ isConnected: Bool, _ id: Int) async throws -> Void
-	var featuredEvent: () async throws -> FeaturedEvent
-	var weaklyEvents: () async throws -> [Event]
+	var homeData: () async throws -> HomeResponse
+	var updatePokemonIsConnected: (_ isConnected: Bool, _ id: Int32) async throws -> Void
 }
 
 extension Repository: DependencyKey {
@@ -22,32 +20,42 @@ extension Repository: DependencyKey {
 		@Dependency(\.databaseClient) var database
 
 		return Self(
-			pokemons: { fetchType in
-				
-				if case .initial = fetchType {
-					let storedPokemons = try await database.pokemones()
-					if !storedPokemons.results.isEmpty {
-						return storedPokemons
+			homeData: {
+				let eventsResponse = EventsResponse.mock
+				let allPokemonIDs = eventsResponse.allPokemonIDs
+
+				let pokemons = await withTaskGroup(of: Pokemon?.self) { group in
+					var pokemons: [Pokemon] = []
+
+					for id in allPokemonIDs {
+						group.addTask {
+							if let storedPokemon = try? await database.pokemon(id: id) {
+								return storedPokemon
+							}
+							
+							if let remotePokemon = try? await apiClient.pokemon(id: id) {
+								try? await database.savePokemon(remotePokemon)
+								return remotePokemon
+							}
+							return nil
+						}
 					}
+
+					for await result in group {
+						if let pokemon = result {
+							pokemons.append(pokemon)
+						}
+					}
+
+					return pokemons
 				}
 
-				let response = try await apiClient.fetchPokemons(fetchType)
-				try await database.savePokemons(response)
-				return response
+				return .init(featuredEvent: eventsResponse.featuredEvent,
+							 weaklyEvents: eventsResponse.weaklyEvents,
+							 popularPokemons: pokemons.sorted(by: { $0.order < $1.order }))
 			},
 			updatePokemonIsConnected: { isConnected, id in
 				try await database.updatePokemonIsConnected(isConnected, id)
-			},
-			/// Here should be some logic to get events
-			/// But I'm using just mocked data
-			/// And sleep to simulate loading
-			featuredEvent: {
-				try await Task.sleep(for: .seconds(2))
-				return .featured
-			},
-			weaklyEvents: {
-				try await Task.sleep(for: .seconds(2))
-				return [.event1, .event2, .event3]
 			}
 		)
 	}()
@@ -55,10 +63,8 @@ extension Repository: DependencyKey {
 
 extension Repository: TestDependencyKey {
 	static let previewValue = Self(
-		pokemons: { _ in .mock },
-		updatePokemonIsConnected: { _,_  in },
-		featuredEvent: { .featured },
-		weaklyEvents: { [.event1, .event2, .event3] }
+		homeData: { .mock },
+		updatePokemonIsConnected: { _,_  in }
 	)
 
 	static let testValue = Self()

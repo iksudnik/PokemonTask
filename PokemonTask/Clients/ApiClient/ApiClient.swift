@@ -10,36 +10,26 @@ import Foundation
 
 @DependencyClient
 struct ApiClient {
-	var fetchPokemons: (PokemonsFetchType) async throws -> PokemonResponse
-}
-
-enum PokemonsFetchType {
-	case initial(_ limit: Int = 20, offset: Int = 0)
-	case next(_ nextUrl: URL)
-
-	var url: URL {
-		switch self {
-		case let .initial(limit, offset):
-			return URL(string: "https://pokeapi.co/api/v2/pokemon/?offset=\(offset)&limit=\(limit)")!
-		case let .next(url):
-			return url
-		}
-	}
+	var pokemon: (_ id: Int32) async throws -> Pokemon
 }
 
 extension ApiClient: DependencyKey {
+	private static func pokemonUrl(for id: Int32) -> URL {
+		URL(string: "https://pokeapi.co/api/v2/pokemon/\(id)")!
+	}
+
 	static let liveValue = Self(
-		fetchPokemons: { fetchType in
-			let url = fetchType.url
+		pokemon: { id in
+			let url = pokemonUrl(for: id)
 			let (data, _) = try await URLSession.shared.data(from: url)
-			return try JSONDecoder().decode(PokemonResponse.self, from: data)
+			return try JSONDecoder().decode(Pokemon.self, from: data)
 		}
 	)
 }
 
 extension ApiClient: TestDependencyKey {
 	static let previewValue = Self(
-		fetchPokemons: { _ in .mock }
+		pokemon: { _ in .bulbasaur }
 	)
 
 	static let testValue = Self()

@@ -92,12 +92,9 @@ struct PokemonView: View {
 }
 
 #Preview("Loading", traits: .sizeThatFitsLayout) {
-	let pokemon = Pokemon(id: 3000,
-						  name: "Pikachu",
-						  isConnected: false)
 	return PokemonView(
 		store: Store(
-			initialState: .init(pokemon: pokemon)) {
+			initialState: .init(pokemon: .pidgeottoWithoutImage)) {
 		PokemonItemReducer()
 	})
 }

@@ -8,6 +8,13 @@
 import ComposableArchitecture
 import SwiftUI
 
+@CasePathable
+enum LoadingState<T: Equatable, E: Error>: Equatable where E: Equatable {
+	case loading
+	case loaded(T)
+	case failure(E)
+}
+
 // MARK: - Reducer
 
 @Reducer
@@ -16,7 +23,10 @@ struct HomeReducer {
 	struct State: Equatable {
 		var topBar = HomeTopBarReducer.State()
 		var featuredEvent: FeaturedEventReducer.State?
-		var events = EventsListReducer.State()
+		var events: EventsListReducer.State?
+		var pokemons: PokemonsListReducer.State?
+
+		var isLoading = false
 	}
 
 	enum Action {
@@ -24,7 +34,9 @@ struct HomeReducer {
 		case topBar(HomeTopBarReducer.Action)
 		case featuredEvent(FeaturedEventReducer.Action)
 		case events(EventsListReducer.Action)
-		case featuredEventresponse(Result<FeaturedEvent, Error>)
+		case pokemons(PokemonsListReducer.Action)
+
+		case initialFetchResponse(Result<HomeResponse, Error>)
 	}
 
 	@Dependency(\.repository) var repository
@@ -34,15 +46,26 @@ struct HomeReducer {
 		Reduce { state, action in
 			switch action {
 			case .initialFetch:
+				state.isLoading = true
 				return .run { send in
-					let result = await Result { try await repository.featuredEvent() }
-					await send(.featuredEventresponse(result))
+					let result = await Result { try await repository.homeData() }
+					await send(.initialFetchResponse(result))
 				}
 
-			case let .featuredEventresponse(result):
+			case let .initialFetchResponse(result):
+				state.isLoading = false
+
 				switch result {
-				case let .success(event):
-					state.featuredEvent = .init(event: event)
+				case let .success(response):
+					state.featuredEvent = .init(event: response.featuredEvent)
+					state.events = .init(events: .init(
+						uniqueElements: response.weaklyEvents.map { .init(event: $0) }
+					))
+					if !response.popularPokemons.isEmpty {
+						state.pokemons = .init(pokemons: .init(
+							uniqueElements: response.popularPokemons.map { .init(pokemon: $0) }
+						))
+					}
 					return .none
 				case .failure:
 					return .none
@@ -57,15 +80,11 @@ struct HomeReducer {
 			case .events:
 				return .none
 
+			case .pokemons:
+				return .none
 			}
-		}
-
-		Scope(state: \.topBar, action: \.topBar) {
-			HomeTopBarReducer()
-		}
-
-		Scope(state: \.events, action: \.events) {
-			EventsListReducer()
+		}.ifLet(\.pokemons, action: \.pokemons) {
+			PokemonsListReducer()
 		}
 	}
 }
@@ -83,25 +102,44 @@ struct HomeView: View {
 
 			ScrollView {
 				VStack(spacing: 32) {
-					if let store = store.scope(state: \.featuredEvent, action: \.featuredEvent) {
-						FeaturedEventView(store: store)
-					} else {
-						FeaturedEventView(store: Store(
-							initialState: .init(event: .featured)) {
-								EmptyReducer()
-							})
+					if store.isLoading {
+						Group {
+							FeaturedEventView(store: Store(
+								initialState: .init(event: .featured)) {
+									EmptyReducer()
+								})
+
+							SectionView(title: "This Weak") {
+								EventsView(store: Store(
+									initialState: .init()) {
+										EmptyReducer()
+									})
+							}
+
+							SectionView(title: "Popular Pokemon") {
+								PokemonsView(store: Store(
+									initialState: PokemonsListReducer.State()) {
+										PokemonsListReducer()
+									})
+							}
+						}
 						.redacted(reason: .placeholder)
-					}
+					} else {
+						if let store = store.scope(state: \.featuredEvent, action: \.featuredEvent) {
+							FeaturedEventView(store: store)
+						}
 
-					SectionView(title: "This Weak") {
-						EventsView(store: store.scope(state: \.events, action: \.events))
-					}
+						if let store = store.scope(state: \.events, action: \.events) {
+							SectionView(title: "This Weak") {
+								EventsView(store: store)
+							}
+						}
 
-					SectionView(title: "Popular Pokemon") {
-						PokemonsView(store: Store(
-							initialState: PokemonsListReducer.State()) {
-								PokemonsListReducer()
-							})
+						if let store = store.scope(state: \.pokemons, action: \.pokemons) {
+							SectionView(title: "Popular Pokemon") {
+								PokemonsView(store: store)
+							}
+						}
 					}
 				}
 				.padding(.bottom, 32)

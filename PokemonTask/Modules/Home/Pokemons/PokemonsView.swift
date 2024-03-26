@@ -14,21 +14,12 @@ import SwiftUI
 struct PokemonsListReducer {
 	@ObservableState
 	struct State: Equatable {
-		var nextUrl: URL?
-		var totalCount: Int = Int.max
 		var pokemons: IdentifiedArrayOf<PokemonItemReducer.State> = []
-
-		var canDownloadMore: Bool {
-			nextUrl != nil && pokemons.count < totalCount
-		}
 	}
 
 	enum Action {
-		case initialFetch
-		case nextFetch
-		case pokemonsResponse(Result<PokemonResponse, Error>)
 		case pokemons(IdentifiedActionOf<PokemonItemReducer>)
-		case updateIsConnected(Bool, Int)
+		case updateIsConnected(Bool, Int32)
 	}
 
 	@Dependency(\.repository) var repository
@@ -37,34 +28,6 @@ struct PokemonsListReducer {
 
 		Reduce { state, action in
 			switch action {
-			case .initialFetch:
-				return .run { send in
-					let result = await Result { try await repository.pokemons(.initial()) }
-					await send(.pokemonsResponse(result))
-				}
-
-			case .nextFetch:
-				guard state.canDownloadMore,
-					  let nextUrl = state.nextUrl else {
-					return .none
-				}
-				return .run { send in
-					let result = await Result { try await repository.pokemons(.next(nextUrl)) }
-					await send(.pokemonsResponse(result))
-				}
-
-			case let .pokemonsResponse(result):
-				switch result {
-				case let .success(response):
-					let pokemonStates: [PokemonItemReducer.State] = response.results
-						.map { .init(pokemon: $0) }
-					state.pokemons.append(contentsOf: pokemonStates)
-					state.nextUrl = response.next
-					state.totalCount = response.count
-					return .none
-				case .failure:
-					return .none
-				}
 
 			case let .pokemons(.element(id: id,
 										action: .delegate(delegateAction))):
@@ -107,19 +70,9 @@ struct PokemonsView: View {
 												span: 2,
 												spacing: spacing)
 				}
-				if store.canDownloadMore {
-					ProgressView()
-						.padding(.horizontal)
-						.onAppear {
-							store.send(.nextFetch)
-						}
-				}
 			}
 		}
 		.scrollIndicators(.never)
-		.task {
-			store.send(.initialFetch)
-		}
 	}
 }
 

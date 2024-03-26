@@ -8,60 +8,78 @@
 import Foundation
 
 struct Pokemon: Decodable, Identifiable, Equatable {
-	let id: Int
+	let id: Int32
 	let name: String
-	var isConnected: Bool
+	let height: Int32
+	let weight: Int32
+	let order: Int32
+	let imageUrl: URL?
+	var isConnected: Bool = false
 
 	enum CodingKeys: String, CodingKey {
-		case name
-		case url
+		case id, name, height, weight, order, sprites
 	}
 
-	init(id: Int, name: String, isConnected: Bool) {
-		self.id = id
-		self.name = name
-		self.isConnected = isConnected
+	enum SpritesCodingKeys: String, CodingKey {
+		case other
+	}
+
+	enum OtherSpritesCodingKeys: String, CodingKey {
+		case officialArtwork = "official-artwork"
+	}
+
+	enum OfficialArtworkCodingKeys: String, CodingKey {
+		case frontDefault = "front_default"
 	}
 
 	init(from decoder: Decoder) throws {
 		let container = try decoder.container(keyedBy: CodingKeys.self)
+		id = try container.decode(Int32.self, forKey: .id)
+		height = try container.decode(Int32.self, forKey: .height)
+		weight = try container.decode(Int32.self, forKey: .weight)
+		order = try container.decode(Int32.self, forKey: .order)
 
-		let name = try container.decode(String.self, forKey: .name)
-		self.name = name.prefix(1).capitalized + name.dropFirst()
+		let rawName = try container.decode(String.self, forKey: .name)
+		self.name = rawName.capitalizingFirstLetter()
 
-		let urlString = try container.decode(String.self, forKey: .url)
-		if let url = URL(string: urlString),
-		   let lastSegment = url.pathComponents.last,
-		   let extractedId = Int(lastSegment) {
-			id = extractedId
+		if let spritesContainer = try? container.nestedContainer(keyedBy: SpritesCodingKeys.self, forKey: .sprites),
+		   let otherContainer = try? spritesContainer.nestedContainer(keyedBy: OtherSpritesCodingKeys.self, forKey: .other),
+		   let officialArtworkContainer = try? otherContainer.nestedContainer(keyedBy: OfficialArtworkCodingKeys.self, forKey: .officialArtwork),
+		   let imageUrlString = try? officialArtworkContainer.decode(String.self, forKey: .frontDefault) {
+			imageUrl = URL(string: imageUrlString)
 		} else {
-			throw DecodingError.dataCorruptedError(forKey: .url,
-												   in: container,
-												   debugDescription: "ID could not be extracted from URL")
+			imageUrl = nil
 		}
-
-		self.isConnected = false
 	}
 }
 
-/// I've decided to get image url such way
-/// Because it's look wird for me to make for every pokemon extra request to get same url
 extension Pokemon {
-	var imageUrl: URL? {
+	init(id: Int32, name: String, height: Int32, weight: Int32,
+		 order: Int32, imageUrl: URL? = nil, isConnected: Bool) {
+		self.id = id
+		self.name = name
+		self.height = height
+		self.weight = weight
+		self.order = order
+		self.imageUrl = imageUrl
+		self.isConnected = isConnected
+	}
+}
+
+
+extension Pokemon {
+	static let bulbasaur = Self(id: 1, name: "Bulbasaur", height: 10, weight: 39, 
+								order: 1, imageUrl: mockImageUrl(1), isConnected: false)
+
+	static let charizard = Self(id: 6, name: "Bulbasaur", height: 13, weight: 24,
+							   order: 2, imageUrl: mockImageUrl(6), isConnected: true)
+
+	static let pidgeotto = Self(id: 17, name: "Bulbasaur", height: 8, weight: 15,
+								order: 3, imageUrl: mockImageUrl(17), isConnected: true)
+
+	static let pidgeottoWithoutImage = Self(id: 17, name: "Bulbasaur", height: 8, weight: 15, order: 3, isConnected: true)
+
+	private static func mockImageUrl(_ id: Int) -> URL? {
 		URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/\(id).png")
-	}
-}
-
-extension Pokemon {
-	static var bulbasaur: Self {
-		.init(id: 1, name: "Bulbasaur", isConnected: false)
-	}
-
-	static var charizard: Self {
-		.init(id: 6, name: "Сharizard", isConnected: true)
-	}
-
-	static var pidgeotto: Self {
-		.init(id: 17, name: "Pidgeotto", isConnected: false)
 	}
 }
