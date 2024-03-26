@@ -18,7 +18,6 @@ struct EventsListReducer {
 	}
 
 	enum Action {
-		case updateEvents([Event])
 		case events(IdentifiedActionOf<EventItemReducer>)
 	}
 
@@ -29,9 +28,6 @@ struct EventsListReducer {
 		Reduce { state, action in
 			switch action {
 			case .events:
-				return .none
-			case let .updateEvents(events):
-				state.events = .init(uniqueElements: events.map { .init(event: $0) })
 				return .none
 			}
 		}

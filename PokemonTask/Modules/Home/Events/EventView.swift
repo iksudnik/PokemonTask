@@ -17,6 +17,24 @@ struct EventItemReducer {
 		var id: Event.ID { event.id }
 		var event: Event
 	}
+
+	enum Action {
+		case delegate(Delegate)
+
+		@CasePathable
+		enum Delegate {
+			case eventTapped(Event)
+		}
+	}
+
+	var body: some ReducerOf<Self> {
+		Reduce { state, action in
+			switch action {
+			case .delegate:
+				return .none
+			}
+		}
+	}
 }
 
 // MARK: - View
@@ -50,6 +68,9 @@ struct EventView: View {
 			.padding(.vertical, 8)
 		}
 		.frame(maxHeight: .infinity, alignment: .top)
+		.onTapGesture {
+			store.send(.delegate(.eventTapped(store.event)))
+		}
 	}
 }
 

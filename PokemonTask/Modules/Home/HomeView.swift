@@ -8,41 +8,44 @@
 import ComposableArchitecture
 import SwiftUI
 
-@CasePathable
-enum LoadingState<T: Equatable, E: Error>: Equatable where E: Equatable {
-	case loading
-	case loaded(T)
-	case failure(E)
-}
-
 // MARK: - Reducer
 
 @Reducer
 struct HomeReducer {
+	
+	@Reducer(state: .equatable)
+	enum Path {
+		case eventdetails(EventDetailsReducer)
+	}
+	
 	@ObservableState
 	struct State: Equatable {
 		var topBar = HomeTopBarReducer.State()
 		var featuredEvent: FeaturedEventReducer.State?
 		var events: EventsListReducer.State?
 		var pokemons: PokemonsListReducer.State?
-
+		
+		var path = StackState<Path.State>()
+		
 		var isLoading = false
 	}
-
+	
 	enum Action {
 		case initialFetch
 		case topBar(HomeTopBarReducer.Action)
 		case featuredEvent(FeaturedEventReducer.Action)
 		case events(EventsListReducer.Action)
 		case pokemons(PokemonsListReducer.Action)
-
+		
+		case path(StackAction<Path.State, Path.Action>)
+		
 		case initialFetchResponse(Result<HomeResponse, Error>)
 	}
-
+	
 	@Dependency(\.repository) var repository
-
+	
 	var body: some ReducerOf<Self> {
-
+		
 		Reduce { state, action in
 			switch action {
 			case .initialFetch:
@@ -51,10 +54,10 @@ struct HomeReducer {
 					let result = await Result { try await repository.homeData() }
 					await send(.initialFetchResponse(result))
 				}
-
+				
 			case let .initialFetchResponse(result):
 				state.isLoading = false
-
+				
 				switch result {
 				case let .success(response):
 					state.featuredEvent = .init(event: response.featuredEvent)
@@ -70,87 +73,108 @@ struct HomeReducer {
 				case .failure:
 					return .none
 				}
-
+				
 			case let .topBar(.delegate(delegateAction)):
 				switch delegateAction {
 				case .loginButtonTapped:
 					return .none
 				}
-
-			case .events:
+				
+			case let .events(.events(.element(_, action))):
+				switch action {
+				case let .delegate(.eventTapped(event)):
+					state.path.append(.eventdetails(EventDetailsReducer.State(event: event)))
+					return .none
+				}
+				
+			case let .featuredEvent(.delegate(.eventTapped(event))):
+				state.path.append(.eventdetails(EventDetailsReducer.State(event: event)))
 				return .none
-
+				
 			case .pokemons:
 				return .none
+				
+			case .path:
+				return .none
 			}
-		}.ifLet(\.pokemons, action: \.pokemons) {
+		}
+		.ifLet(\.pokemons, action: \.pokemons) {
 			PokemonsListReducer()
 		}
+		.forEach(\.path, action: \.path)
 	}
 }
 
 // MARK: - View
 
 struct HomeView: View {
-	var store: StoreOf<HomeReducer>
-
+	@Bindable var store: StoreOf<HomeReducer>
+	
 	var body: some View {
-		VStack {
-			HomeTopBarView(store: store.scope(state: \.topBar,
-											  action: \.topBar))
-			.padding(.bottom, 16)
-
-			ScrollView {
-				VStack(spacing: 32) {
-					if store.isLoading {
-						Group {
-							FeaturedEventView(store: Store(
-								initialState: .init(event: .featured)) {
-									EmptyReducer()
-								})
-
-							SectionView(title: "This Weak") {
-								EventsView(store: Store(
-									initialState: .init()) {
+		NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
+			VStack {
+				HomeTopBarView(store: store.scope(state: \.topBar,
+												  action: \.topBar))
+				.padding(.bottom, 16)
+				
+				ScrollView {
+					VStack(spacing: 32) {
+						if store.isLoading {
+							Group {
+								FeaturedEventView(store: Store(
+									initialState: .init(event: .featured)) {
 										EmptyReducer()
 									})
+								
+								SectionView(title: "This Weak") {
+									EventsView(store: Store(
+										initialState: .init()) {
+											EmptyReducer()
+										})
+								}
+								
+								SectionView(title: "Popular Pokemons") {
+									PokemonsView(store: Store(
+										initialState: PokemonsListReducer.State()) {
+											PokemonsListReducer()
+										})
+								}
 							}
-
-							SectionView(title: "Popular Pokemon") {
-								PokemonsView(store: Store(
-									initialState: PokemonsListReducer.State()) {
-										PokemonsListReducer()
-									})
+							.redacted(reason: .placeholder)
+						} else {
+							if let store = store.scope(state: \.featuredEvent, action: \.featuredEvent) {
+								FeaturedEventView(store: store)
 							}
-						}
-						.redacted(reason: .placeholder)
-					} else {
-						if let store = store.scope(state: \.featuredEvent, action: \.featuredEvent) {
-							FeaturedEventView(store: store)
-						}
-
-						if let store = store.scope(state: \.events, action: \.events) {
-							SectionView(title: "This Weak") {
-								EventsView(store: store)
+							
+							if let store = store.scope(state: \.events, action: \.events) {
+								SectionView(title: "This Weak") {
+									EventsView(store: store)
+								}
 							}
-						}
-
-						if let store = store.scope(state: \.pokemons, action: \.pokemons) {
-							SectionView(title: "Popular Pokemon") {
-								PokemonsView(store: store)
+							
+							if let store = store.scope(state: \.pokemons, action: \.pokemons) {
+								SectionView(title: "Popular Pokemon") {
+									PokemonsView(store: store)
+								}
 							}
 						}
 					}
+					.padding(.bottom, 32)
 				}
-				.padding(.bottom, 32)
+				.scrollIndicators(.never)
 			}
-			.scrollIndicators(.never)
+			.padding(.horizontal, 12)
+			.background(Color(.systemGray6))
+			.task {
+				store.send(.initialFetch)
+			}
+		} destination: { store in
+			switch store.case {
+			case let .eventdetails(store):
+				EventDetailsView(store: store)
+			}
 		}
-		.padding(.horizontal, 12)
-		.background(Color(.systemGray6))
-		.task {
-			store.send(.initialFetch)
-		}
+		
 	}
 }
 

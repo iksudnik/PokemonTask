@@ -16,6 +16,24 @@ struct FeaturedEventReducer {
 	struct State: Equatable {
 		var event: FeaturedEvent
 	}
+
+	enum Action {
+		case delegate(Delegate)
+
+		@CasePathable
+		enum Delegate {
+			case eventTapped(Event)
+		}
+	}
+
+	var body: some ReducerOf<Self> {
+		Reduce { state, action in
+			switch action {
+			case .delegate:
+				return .none
+			}
+		}
+	}
 }
 
 // MARK: - View
@@ -49,6 +67,9 @@ struct FeaturedEventView: View {
 				.font(.system(size: 16))
 				.foregroundStyle(.secondary)
 			}
+		}
+		.onTapGesture {
+			store.send(.delegate(.eventTapped(store.event.event)))
 		}
 	}
 }
