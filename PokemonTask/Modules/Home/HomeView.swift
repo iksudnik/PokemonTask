@@ -31,6 +31,7 @@ struct HomeReducer {
 		var isLoading = false
 	}
 
+	@CasePathable
 	enum Action {
 		case initialFetch
 		case topBar(HomeTopBarReducer.Action)
@@ -92,14 +93,18 @@ struct HomeReducer {
 				state.path.append(.eventDetails(EventDetailsReducer.State(event: event)))
 				return .none
 
-			case let .pokemons(.pokemons(.element(_, action))):
-				switch action {
-				case let .delegate(.pokemonTapped(pokemon)):
-					state.path.append(.pokemonDetails(PokemonDetailsReducer.State(pokemon: pokemon)))
-					return .none
-				case .delegate(.connectButtonTapped):
-					return .none
-				}
+			case let .pokemons(.delegate(.pokemonTapped(pokemon))):
+				state.path.append(.pokemonDetails(.init(pokemon: pokemon)))
+				return .none
+
+			case let .path(.element(id: _,
+									action: .eventDetails(
+										.pokemons(
+											.delegate(
+												.pokemonTapped(pokemon)
+											))))):
+				state.path.append(.pokemonDetails(.init(pokemon: pokemon)))
+				return .none
 
 			case .path:
 				return .none
@@ -108,6 +113,7 @@ struct HomeReducer {
 				return .none
 			}
 		}
+		//		._printChanges()
 		.ifLet(\.pokemons, action: \.pokemons) {
 			PokemonsListReducer()
 		}
@@ -121,6 +127,9 @@ struct HomeView: View {
 	@Bindable var store: StoreOf<HomeReducer>
 
 	var body: some View {
+
+		let _ = Self._printChanges()
+
 		NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
 			VStack {
 				HomeTopBarView(store: store.scope(state: \.topBar,

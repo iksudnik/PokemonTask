@@ -21,7 +21,7 @@ struct Event: Identifiable, Equatable {
 struct FeaturedEvent: Equatable {
 	let featuredTitle: String
 	let event: Event
-
+	
 	subscript<T>(dynamicMember keyPath: KeyPath<Event, T>) -> T {
 		event[keyPath: keyPath]
 	}
@@ -43,18 +43,19 @@ extension FeaturedEvent {
 }
 
 extension Event {
+	
 	static let event1 = Self(image: .event01,
 							 title: "Legends? Go! Friends? Go!",
 							 location: "Cinnabar Island",
 							 date: .from(string: "18.10.2024"),
 							 pokemonIds: [2, 6, 11, 21, 39, 112])
-
+	
 	static let event2 = Self(image: .event02,
 							 title: "EXHALE with Professor Oak",
 							 location: "Pallet Town",
 							 date: .from(string: "22.10.2024"),
 							 pokemonIds: [4, 8, 126, 54, 87, 224])
-
+	
 	static let event3 = Self(image: .event03,
 							 title: "The Dream Continues!",
 							 location: "Cinnabar Island",

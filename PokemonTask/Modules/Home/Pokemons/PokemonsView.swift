@@ -17,9 +17,16 @@ struct PokemonsListReducer {
 		var pokemons: IdentifiedArrayOf<PokemonItemReducer.State> = []
 	}
 
+	@CasePathable
 	enum Action {
 		case pokemons(IdentifiedActionOf<PokemonItemReducer>)
 		case updateIsConnected(Bool, Pokemon.ID)
+		case delegate(Delegate)
+
+		@CasePathable
+		enum Delegate {
+			case pokemonTapped(Pokemon)
+		}
 	}
 
 	@Dependency(\.repository) var repository
@@ -41,11 +48,11 @@ struct PokemonsListReducer {
 						try await repository.updatePokemonIsConnected(isConnected, id)
 						await send(.updateIsConnected(isConnected, id), animation: .smooth)
 					}
-				case .pokemonTapped:
-					return .none
 				}
 			case let .updateIsConnected(isConnected, id):
 				state.pokemons[id: id]?.pokemon.isConnected = isConnected
+				return .none
+			case .delegate:
 				return .none
 			}
 		}
@@ -71,6 +78,9 @@ struct PokemonsView: View {
 												count: 5,
 												span: 2,
 												spacing: spacing)
+						.onTapGesture {
+							store.send(.delegate(.pokemonTapped(pokemon.pokemon)))
+						}
 				}
 			}
 		}

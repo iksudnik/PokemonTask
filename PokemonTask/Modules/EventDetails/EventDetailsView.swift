@@ -19,6 +19,7 @@ struct EventDetailsReducer {
 		var pokemons: PokemonsListReducer.State?
 	}
 
+	@CasePathable
 	enum Action {
 		case initialFetch
 		case pokemonsResponse(Result<[Pokemon], Error>)
@@ -46,13 +47,13 @@ struct EventDetailsReducer {
 						uniqueElements: pokemons.map { .init(pokemon: $0) }
 					))
 					return .none
+					
 				case .failure:
 					return .none
 				}
 
 			case .pokemons:
 				return .none
-
 			}
 		}
 		.ifLet(\.pokemons, action: \.pokemons) {
