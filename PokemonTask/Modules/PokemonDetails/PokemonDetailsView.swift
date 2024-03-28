@@ -105,6 +105,7 @@ struct PokemonDetailsView: View {
 			}
 		}
 		.navigationTitle(store.pokemon.name)
+		.toolbar(.hidden, for: .tabBar)
 	}
 }
 

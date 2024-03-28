@@ -102,6 +102,7 @@ struct EventDetailsView: View {
 		.ignoresSafeArea(edges: .top)
 		.navigationTitle(store.event.title)
 		.scrollIndicators(.hidden)
+		.toolbar(.hidden, for: .tabBar)
 		.task {
 			store.send(.initialFetch)
 		}

@@ -97,12 +97,8 @@ struct HomeReducer {
 				state.path.append(.pokemonDetails(.init(pokemon: pokemon)))
 				return .none
 
-			case let .path(.element(id: _,
-									action: .eventDetails(
-										.pokemons(
-											.delegate(
-												.pokemonTapped(pokemon)
-											))))):
+			case let .path(.element(id: _, action: .eventDetails(
+				.pokemons(.delegate(.pokemonTapped(pokemon)))))):
 				state.path.append(.pokemonDetails(.init(pokemon: pokemon)))
 				return .none
 
@@ -113,7 +109,6 @@ struct HomeReducer {
 				return .none
 			}
 		}
-		//		._printChanges()
 		.ifLet(\.pokemons, action: \.pokemons) {
 			PokemonsListReducer()
 		}
@@ -127,9 +122,7 @@ struct HomeView: View {
 	@Bindable var store: StoreOf<HomeReducer>
 
 	var body: some View {
-
-		let _ = Self._printChanges()
-
+		
 		NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
 			VStack {
 				HomeTopBarView(store: store.scope(state: \.topBar,
