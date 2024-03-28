@@ -24,7 +24,7 @@ struct HomeReducer {
 		var topBar = HomeTopBarReducer.State()
 		var featuredEvent: FeaturedEventReducer.State?
 		var events: EventsListReducer.State?
-		var pokemons: PokemonsListReducer.State?
+		var pokemons: PokemonsListFeature.State?
 
 		var path = StackState<Path.State>()
 
@@ -37,7 +37,7 @@ struct HomeReducer {
 		case topBar(HomeTopBarReducer.Action)
 		case featuredEvent(FeaturedEventReducer.Action)
 		case events(EventsListReducer.Action)
-		case pokemons(PokemonsListReducer.Action)
+		case pokemons(PokemonsListFeature.Action)
 
 		case path(StackAction<Path.State, Path.Action>)
 
@@ -110,7 +110,7 @@ struct HomeReducer {
 			}
 		}
 		.ifLet(\.pokemons, action: \.pokemons) {
-			PokemonsListReducer()
+			PokemonsListFeature()
 		}
 		.forEach(\.path, action: \.path)
 	}
@@ -146,9 +146,9 @@ struct HomeView: View {
 								}
 
 								SectionView(title: "Popular Pokemons") {
-									PokemonsView(store: Store(
-										initialState: PokemonsListReducer.State()) {
-											PokemonsListReducer()
+									PokemonsListView(store: Store(
+										initialState: PokemonsListFeature.State()) {
+											PokemonsListFeature()
 										})
 								}
 							}
@@ -166,7 +166,7 @@ struct HomeView: View {
 
 							if let store = store.scope(state: \.pokemons, action: \.pokemons) {
 								SectionView(title: "Popular Pokemon") {
-									PokemonsView(store: store)
+									PokemonsListView(store: store)
 								}
 							}
 						}

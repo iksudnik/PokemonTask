@@ -16,14 +16,14 @@ struct EventDetailsReducer {
 	struct State: Equatable {
 		var event: Event
 		var isLoading = false
-		var pokemons: PokemonsListReducer.State?
+		var pokemons: PokemonsListFeature.State?
 	}
 
 	@CasePathable
 	enum Action {
 		case initialFetch
 		case pokemonsResponse(Result<[Pokemon], Error>)
-		case pokemons(PokemonsListReducer.Action)
+		case pokemons(PokemonsListFeature.Action)
 	}
 
 	@Dependency(\.repository) var repository
@@ -57,7 +57,7 @@ struct EventDetailsReducer {
 			}
 		}
 		.ifLet(\.pokemons, action: \.pokemons) {
-			PokemonsListReducer()
+			PokemonsListFeature()
 		}
 	}
 }
@@ -91,7 +91,7 @@ struct EventDetailsView: View {
 
 					if let store = store.scope(state: \.pokemons, action: \.pokemons) {
 						SectionView(title: "Featured Pokemons") {
-							PokemonsView(store: store)
+							PokemonsListView(store: store)
 						}
 						.padding(.top, 16)
 					}

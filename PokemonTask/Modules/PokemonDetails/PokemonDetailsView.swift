@@ -15,28 +15,27 @@ struct PokemonDetailsReducer {
 	@ObservableState
 	struct State: Equatable {
 		var pokemon: Pokemon
+		var connectButton: PokemonConnectButtonFeature.State
+
+		init(pokemon: Pokemon) {
+			self.pokemon = pokemon
+			connectButton = .init(pokemon: pokemon)
+		}
 	}
 
 	enum Action {
-		case connectButtonTapped
-		case updateIsConnected(Bool)
+		case connectButton(PokemonConnectButtonFeature.Action)
 	}
 
-	@Dependency(\.repository) var repository
-
 	var body: some ReducerOf<Self> {
+		
+		Scope(state: \.connectButton, action: \.connectButton) {
+			PokemonConnectButtonFeature()
+		}
 
 		Reduce { state, action in
 			switch action {
-			case .connectButtonTapped:
-				return .run { [pokemon = state.pokemon] send in
-					let isConnected = !pokemon.isConnected
-					try await repository.updatePokemonIsConnected(isConnected, pokemon.id)
-					await send(.updateIsConnected(isConnected), animation: .smooth)
-				}
-
-			case let .updateIsConnected(isConnected):
-				state.pokemon.isConnected = isConnected
+			case .connectButton:
 				return .none
 			}
 		}
@@ -92,13 +91,8 @@ struct PokemonDetailsView: View {
 					}
 					.font(.system(size: 16))
 
-					Button(action: {
-						store.send(.connectButtonTapped)
-					}, label: {
-						Text(store.pokemon.isConnected ? "Connected" : "Connect")
-							.frame(maxWidth: .infinity)
-					})
-					.buttonStyle(.main)
+					PokemonConnectButton(store: store.scope(state: \.connectButton, action: \.connectButton))
+						.buttonStyle(.main)
 				}
 				.padding(.top, 8)
 				.padding(.horizontal, 16)

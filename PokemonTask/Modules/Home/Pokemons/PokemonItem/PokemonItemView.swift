@@ -1,48 +1,16 @@
 //
-//  PokemonView.swift
+//  PokemonItemView.swift
 //  PokemonTask
 //
 //  Created by Ilya Sudnik on 25.03.24.
 //
-
 import ComposableArchitecture
 import SwiftUI
 import SDWebImageSwiftUI
 
-// MARK: - Reducer
 
-@Reducer
-struct PokemonItemReducer {
-	@ObservableState
-	struct State: Equatable, Identifiable {
-		var id: Pokemon.ID { pokemon.id }
-		var pokemon: Pokemon
-	}
-
-	@CasePathable
-	enum Action {
-		case delegate(Delegate)
-		
-		@CasePathable
-		enum Delegate {
-			case connectButtonTapped
-		}
-	}
-
-	var body: some ReducerOf<Self> {
-		Reduce { state, action in
-			switch action {
-			case .delegate:
-				return .none
-			}
-		}
-	}
-}
-
-// MARK: - View
-
-struct PokemonView: View {
-	let store: StoreOf<PokemonItemReducer>
+struct PokemonItemView: View {
+	let store: StoreOf<PokemonItemFeature>
 
 	var body: some View {
 		VStack(spacing: 24) {
@@ -65,12 +33,7 @@ struct PokemonView: View {
 			Text(store.pokemon.name)
 				.font(.system(size: 16))
 
-			Button(action: {
-				store.send(.delegate(.connectButtonTapped))
-			}, label: {
-				Text(store.pokemon.isConnected ? "Connected" : "Connect")
-			})
-			.buttonStyle(.main)
+			PokemonConnectButton(store: store.scope(state: \.connectButton, action: \.connectButton))
 			.padding(.bottom, 16)
 		}
 		.frame(maxWidth: .infinity)
@@ -85,17 +48,17 @@ struct PokemonView: View {
 // MARK: - Previews
 
 #Preview(traits: .sizeThatFitsLayout) {
-	PokemonView(
+	PokemonItemView(
 		store: Store(
 			initialState: .init(pokemon: .bulbasaur)) {
-		PokemonItemReducer()
+		PokemonItemFeature()
 	})
 }
 
 #Preview("Loading", traits: .sizeThatFitsLayout) {
-	return PokemonView(
+	return PokemonItemView(
 		store: Store(
 			initialState: .init(pokemon: .pidgeottoWithoutImage)) {
-		PokemonItemReducer()
+		PokemonItemFeature()
 	})
 }
