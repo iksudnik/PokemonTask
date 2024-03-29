@@ -25,20 +25,9 @@ struct PokemonsListFeature {
 		}
 	}
 
-	@Dependency(\.repository) var repository
-
 	var body: some ReducerOf<Self> {
 
-		Reduce { state, action in
-			switch action {
-
-			case .pokemons:
-				return .none
-				
-			case .delegate:
-				return .none
-			}
-		}
+		EmptyReducer()
 		.forEach(\.pokemons, action: \.pokemons) {
 			PokemonItemFeature()
 		}

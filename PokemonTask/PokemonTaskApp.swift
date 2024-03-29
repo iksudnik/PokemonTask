@@ -13,8 +13,8 @@ struct PokemonTaskApp: App {
 	var body: some Scene {
 		WindowGroup {
 			MainView(store: Store(
-				initialState: MainReducer.State()) {
-					MainReducer()
+				initialState: MainFeature.State()) {
+					MainFeature()
 				}
 			)
 		}

@@ -11,14 +11,14 @@ import SwiftUI
 // MARK: - Reducer
 
 @Reducer
-struct TicketsReducer {
+struct TicketsFeature {
 	struct State: Equatable {}
 }
 
 // MARK: - View
 
 struct TicketsView: View {
-	let store: StoreOf<TicketsReducer>
+	let store: StoreOf<TicketsFeature>
 	var body: some View {
 		Text("Tickets")
 	}
@@ -28,8 +28,8 @@ struct TicketsView: View {
 
 #Preview {
 	TicketsView(store: Store(
-		initialState: TicketsReducer.State()) {
-			TicketsReducer()
+		initialState: TicketsFeature.State()) {
+			TicketsFeature()
 		}
 	)
 }

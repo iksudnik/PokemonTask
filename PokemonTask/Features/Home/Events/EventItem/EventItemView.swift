@@ -1,5 +1,5 @@
 //
-//  EventView.swift
+//  EventItemView.swift
 //  PokemonTask
 //
 //  Created by Ilya Sudnik on 25.03.24.
@@ -8,39 +8,8 @@
 import ComposableArchitecture
 import SwiftUI
 
-// MARK: - Reducer
-
-@Reducer
-struct EventItemReducer {
-	@ObservableState
-	struct State: Equatable, Identifiable {
-		var id: Event.ID { event.id }
-		var event: Event
-	}
-
-	enum Action {
-		case delegate(Delegate)
-
-		@CasePathable
-		enum Delegate {
-			case eventTapped(Event)
-		}
-	}
-
-	var body: some ReducerOf<Self> {
-		Reduce { state, action in
-			switch action {
-			case .delegate:
-				return .none
-			}
-		}
-	}
-}
-
-// MARK: - View
-
-struct EventView: View {
-	let store: StoreOf<EventItemReducer>
+struct EventItemView: View {
+	let store: StoreOf<EventItemFeature>
 
 	var body: some View {
 		VStack(alignment: .leading) {
@@ -77,10 +46,10 @@ struct EventView: View {
 // MARK: - Previews
 
 #Preview {
-	EventView(
+	EventItemView(
 		store: Store(
-			initialState: EventItemReducer.State(event: .event1)) {
-				EventItemReducer()
+			initialState: EventItemFeature.State(event: .event1)) {
+				EventItemFeature()
 			}
 	)
 }

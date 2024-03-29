@@ -8,38 +8,8 @@
 import ComposableArchitecture
 import SwiftUI
 
-// MARK: - Reducer
-
-@Reducer
-struct HomeTopBarReducer {
-	@ObservableState
-	struct State: Equatable {
-		var isLoggedIn = false
-	}
-
-	enum Action {
-		case delegate(Delegate)
-
-		@CasePathable
-		enum Delegate {
-			case loginButtonTapped
-		}
-	}
-
-	var body: some ReducerOf<Self> {
-		Reduce { state, action in
-			switch action {
-			case .delegate:
-				return .none
-			}
-		}
-	}
-}
-
-// MARK: - View
-
 struct HomeTopBarView: View {
-	let store: StoreOf<HomeTopBarReducer>
+	let store: StoreOf<HomeTopBarFeature>
 
 	var body: some View {
 		HStack {
@@ -74,7 +44,7 @@ struct HomeTopBarView: View {
 
 #Preview {
 	HomeTopBarView(store: Store(
-		initialState: HomeTopBarReducer.State()) {
-			HomeTopBarReducer()
+		initialState: HomeTopBarFeature.State()) {
+			HomeTopBarFeature()
 		})
 }

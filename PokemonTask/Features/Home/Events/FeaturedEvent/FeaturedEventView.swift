@@ -8,38 +8,8 @@
 import ComposableArchitecture
 import SwiftUI
 
-// MARK: - Reducer
-
-@Reducer
-struct FeaturedEventReducer {
-	@ObservableState
-	struct State: Equatable {
-		var event: FeaturedEvent
-	}
-
-	enum Action {
-		case delegate(Delegate)
-
-		@CasePathable
-		enum Delegate {
-			case eventTapped(Event)
-		}
-	}
-
-	var body: some ReducerOf<Self> {
-		Reduce { state, action in
-			switch action {
-			case .delegate:
-				return .none
-			}
-		}
-	}
-}
-
-// MARK: - View
-
 struct FeaturedEventView: View {
-	let store: StoreOf<FeaturedEventReducer>
+	let store: StoreOf<FeaturedEventFeature>
 
 	var body: some View {
 		VStack(alignment: .leading) {
@@ -80,7 +50,7 @@ struct FeaturedEventView: View {
 	FeaturedEventView(
 		store: Store(
 			initialState: .init(event: .featured)) {
-				FeaturedEventReducer()
+				FeaturedEventFeature()
 		})
 }
 

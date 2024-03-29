@@ -16,20 +16,20 @@ struct PokemonConnectButtonFeature {
 	struct State: Equatable {
 		var pokemon: Pokemon
 	}
-
+	
 	@CasePathable
 	enum Action {
 		case tapped
 		case delegate(Delegate)
-
+		
 		@CasePathable
 		enum Delegate {
 			case updateIsConnected(Bool)
 		}
 	}
-
+	
 	@Dependency(\.repository) var repository
-
+	
 	var body: some ReducerOf<Self> {
 		Reduce { state, action in
 			switch action {
@@ -39,7 +39,7 @@ struct PokemonConnectButtonFeature {
 					try await repository.updatePokemonIsConnected(isConnected, pokemon.id)
 					await send(.delegate(.updateIsConnected(isConnected)), animation: .snappy)
 				}
-
+				
 			case let .delegate(.updateIsConnected(isConnected)):
 				state.pokemon.isConnected = isConnected
 				return .none
@@ -53,12 +53,13 @@ struct PokemonConnectButtonFeature {
 
 struct PokemonConnectButton: View {
 	let store: StoreOf<PokemonConnectButtonFeature>
-
+	
 	var body: some View {
 		Button(action: {
 			store.send(.tapped)
 		}, label: {
 			Text(store.pokemon.isConnected ? "Connected" : "Connect")
+				.frame(maxWidth: .infinity)
 		})
 		.buttonStyle(.main)
 	}

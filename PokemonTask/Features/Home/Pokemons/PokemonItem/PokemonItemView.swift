@@ -21,6 +21,7 @@ struct PokemonItemView: View {
 
 			PokemonConnectButton(store: store.scope(state: \.connectButton, action: \.connectButton))
 			.padding(.bottom, 16)
+			.padding(.horizontal, 8)
 		}
 		.frame(maxWidth: .infinity)
 		.frame(maxHeight: .infinity, alignment: .top)

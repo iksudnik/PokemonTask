@@ -11,14 +11,14 @@ import SwiftUI
 // MARK: - Reducer
 
 @Reducer
-struct SearchReducer {
+struct SearchFeature {
 	struct State: Equatable {}
 }
 
 // MARK: - View
 
 struct SearchView: View {
-	let store: StoreOf<SearchReducer>
+	let store: StoreOf<SearchFeature>
     var body: some View {
         Text("Search")
     }
@@ -28,8 +28,8 @@ struct SearchView: View {
 
 #Preview {
 	SearchView(store: Store(
-		initialState: SearchReducer.State()) {
-			SearchReducer()
+		initialState: SearchFeature.State()) {
+			SearchFeature()
 		}
 	)
 }

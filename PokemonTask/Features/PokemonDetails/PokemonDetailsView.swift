@@ -6,50 +6,10 @@
 //
 
 import ComposableArchitecture
-import SDWebImageSwiftUI
 import SwiftUI
 
-@Reducer
-struct PokemonDetailsReducer {
-
-	@ObservableState
-	struct State: Equatable {
-		var pokemon: Pokemon
-		var connectButton: PokemonConnectButtonFeature.State
-
-		init(pokemon: Pokemon) {
-			self.pokemon = pokemon
-			connectButton = .init(pokemon: pokemon)
-		}
-	}
-
-	enum Action {
-		case connectButton(PokemonConnectButtonFeature.Action)
-	}
-
-	var body: some ReducerOf<Self> {
-
-		Scope(state: \.connectButton, action: \.connectButton) {
-			PokemonConnectButtonFeature()
-		}
-
-		Reduce { state, action in
-			switch action {
-			case let .connectButton(.delegate(.updateIsConnected(isConnected))):
-				state.pokemon.isConnected = isConnected
-				return .none
-
-			case .connectButton:
-				return .none
-			}
-		}
-	}
-}
-
-// MARK: - View
-
 struct PokemonDetailsView: View {
-	let store: StoreOf<PokemonDetailsReducer>
+	let store: StoreOf<PokemonDetailsFeature>
 	var body: some View {
 		ScrollView {
 			VStack(spacing: 24) {
@@ -59,7 +19,7 @@ struct PokemonDetailsView: View {
 					}
 					.padding(.top, 16)
 
-				VStack(alignment: .leading, spacing: 32) {
+				VStack(spacing: 32) {
 
 					GroupBox("Details:") {
 						Grid(alignment: .leading, horizontalSpacing: 8, verticalSpacing: 8) {
@@ -82,13 +42,15 @@ struct PokemonDetailsView: View {
 								Text("\(store.pokemon.weight)")
 							}
 						}
+						.frame(maxWidth: .infinity, alignment: .leading)
+						.padding(.top)
 						.font(.system(size: 16))
 					}
+
+					PokemonConnectButton(store: store.scope(state: \.connectButton, action: \.connectButton))
 				}
 				.padding(.top, 8)
 				.padding(.horizontal, 16)
-
-				PokemonConnectButton(store: store.scope(state: \.connectButton, action: \.connectButton))
 			}
 		}
 		.navigationTitle(store.pokemon.name)
@@ -101,8 +63,8 @@ struct PokemonDetailsView: View {
 
 #Preview {
 	PokemonDetailsView(store: Store(
-		initialState: PokemonDetailsReducer.State(pokemon: .bulbasaur)) {
-			PokemonDetailsReducer()
+		initialState: PokemonDetailsFeature.State(pokemon: .bulbasaur)) {
+			PokemonDetailsFeature()
 		}
 	)
 }
