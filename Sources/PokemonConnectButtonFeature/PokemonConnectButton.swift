@@ -12,7 +12,7 @@ public struct PokemonConnectButtonFeature {
 	public struct State: Equatable {
 		public var pokemon: Pokemon
 		
-		public  init(pokemon: Pokemon) {
+		public init(pokemon: Pokemon) {
 			self.pokemon = pokemon
 		}
 	}

@@ -25,24 +25,26 @@ public struct HomeFeature {
 
 		public var path: StackState<Path.State>
 
-		public var isLoading: Bool
-		public var dataDidLoad: Bool
+		public var loadingState: LoadingState
 
 		public init(topBar: HomeTopBarFeature.State = HomeTopBarFeature.State(),
 					featuredEvent: FeaturedEventFeature.State? = nil,
 					events: EventsListFeature.State? = nil,
 					pokemons: PokemonsListFeature.State? = nil,
 					path: StackState<Path.State> = StackState<Path.State>(),
-					isLoading: Bool = false,
-					dataDidLoad: Bool = false) {
+					loadingState: LoadingState = .idle) {
 			self.topBar = topBar
 			self.featuredEvent = featuredEvent
 			self.events = events
 			self.pokemons = pokemons
 			self.path = path
-			self.isLoading = isLoading
-			self.dataDidLoad = dataDidLoad
+			self.loadingState = loadingState
 		}
+	}
+
+	public enum LoadingState: Equatable {
+		case idle
+		case loaded
 	}
 
 	@CasePathable
@@ -67,19 +69,13 @@ public struct HomeFeature {
 		Reduce { state, action in
 			switch action {
 			case .onAppear:
-				guard !state.dataDidLoad else {
-					return .none
-				}
-
-				state.isLoading = true
 				return .run { send in
 					let result = await Result { try await repository.homeData() }
 					await send(.initialFetchResponse(result))
 				}
 
 			case let .initialFetchResponse(result):
-				state.isLoading = false
-				state.dataDidLoad = true
+				state.loadingState = .loaded
 
 				switch result {
 				case let .success(response):

@@ -25,7 +25,7 @@ public struct HomeView: View {
 
 				ScrollView {
 					VStack(spacing: 32) {
-						if store.isLoading {
+						if store.loadingState == .idle {
 							Group {
 								FeaturedEventView(store: Store(
 									initialState: .init(event: .featured)) {
