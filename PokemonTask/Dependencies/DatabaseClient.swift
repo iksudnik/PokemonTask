@@ -11,9 +11,9 @@ import CoreData
 
 @DependencyClient
 struct DatabaseClient {
-	var pokemon: @MainActor (_ id: Int32) async throws -> Pokemon?
+	var pokemon: @MainActor (_ id: Pokemon.ID) async throws -> Pokemon?
 	var savePokemon: @MainActor (Pokemon) async throws -> Void
-	var updatePokemonIsConnected: @MainActor (_ isConnected: Bool, _ id: Int32) async throws -> Void
+	var updatePokemonIsConnected: @MainActor (_ isConnected: Bool, _ id: Pokemon.ID) async throws -> Void
 }
 
 enum DatabaseClientError: Error {

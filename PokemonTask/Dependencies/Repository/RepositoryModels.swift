@@ -17,7 +17,7 @@ extension EventsResponse {
 		weaklyEvents + [featuredEvent.event]
 	}
 	
-	var allPokemonIDs: Set<Int32> {
+	var allPokemonIDs: Set<Pokemon.ID> {
 		return Set(allEvents.flatMap { $0.pokemonIds })
 	}
 }

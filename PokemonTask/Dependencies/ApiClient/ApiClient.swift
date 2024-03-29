@@ -10,11 +10,11 @@ import Foundation
 
 @DependencyClient
 struct ApiClient {
-	var pokemon: (_ id: Int32) async throws -> Pokemon
+	var pokemon: (_ id: Pokemon.ID) async throws -> Pokemon
 }
 
 extension ApiClient: DependencyKey {
-	private static func pokemonUrl(for id: Int32) -> URL {
+	private static func pokemonUrl(for id: Pokemon.ID) -> URL {
 		URL(string: "https://pokeapi.co/api/v2/pokemon/\(id)")!
 	}
 

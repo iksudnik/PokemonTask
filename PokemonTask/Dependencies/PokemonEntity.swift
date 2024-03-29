@@ -14,7 +14,7 @@ extension PokemonEntity {
 	}
 
 	func update(from pokemon: Pokemon) {
-		id = Int32(pokemon.id)
+		id = pokemon.id
 		name = pokemon.name
 		height = pokemon.height
 		weight = pokemon.weight
