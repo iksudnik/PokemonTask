@@ -34,6 +34,10 @@ struct PokemonItemFeature {
 
 		Reduce { state, action in
 			switch action {
+			case let .connectButton(.delegate(.updateIsConnected(isConnected))):
+				state.pokemon.isConnected = isConnected
+				return .none
+				
 			case .connectButton:
 				return .none
 			}

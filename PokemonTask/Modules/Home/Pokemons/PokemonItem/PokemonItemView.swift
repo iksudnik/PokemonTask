@@ -6,27 +6,13 @@
 //
 import ComposableArchitecture
 import SwiftUI
-import SDWebImageSwiftUI
-
 
 struct PokemonItemView: View {
 	let store: StoreOf<PokemonItemFeature>
 
 	var body: some View {
 		VStack(spacing: 24) {
-			Circle()
-				.fill(Color(.systemGray6))
-				.overlay {
-					WebImage(url: store.pokemon.imageUrl) { image in
-						image
-							.resizable()
-							.scaleEffect(.init(width: 0.8, height: 0.8), anchor: .bottom)
-					} placeholder: {
-						Image(.shadow)
-							.resizable()
-							.scaleEffect(.init(width: 0.7, height: 0.7), anchor: .bottom)
-					}
-				}
+			PokemonImageView(imageUrl: store.pokemon.imageUrl)
 				.padding(.horizontal, 28)
 				.padding(.top, 16)
 

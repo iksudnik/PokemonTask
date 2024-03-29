@@ -28,13 +28,17 @@ struct PokemonDetailsReducer {
 	}
 
 	var body: some ReducerOf<Self> {
-		
+
 		Scope(state: \.connectButton, action: \.connectButton) {
 			PokemonConnectButtonFeature()
 		}
 
 		Reduce { state, action in
 			switch action {
+			case let .connectButton(.delegate(.updateIsConnected(isConnected))):
+				state.pokemon.isConnected = isConnected
+				return .none
+
 			case .connectButton:
 				return .none
 			}
@@ -49,66 +53,46 @@ struct PokemonDetailsView: View {
 	var body: some View {
 		ScrollView {
 			VStack(spacing: 24) {
-				Circle()
-					.fill(Color(.systemGray6))
-					.overlay {
-						WebImage(url: store.pokemon.imageUrl) { image in
-							image
-								.resizable()
-								.scaleEffect(.init(width: 0.8, height: 0.8), anchor: .bottom)
-						} placeholder: {
-							Image(.shadow)
-								.resizable()
-								.scaleEffect(.init(width: 0.7, height: 0.7), anchor: .bottom)
-						}
-					}
+				PokemonImageView(imageUrl: store.pokemon.imageUrl)
 					.containerRelativeFrame(.horizontal) { width, _ in
 						width * 0.6
 					}
 					.padding(.top, 16)
 
 				VStack(alignment: .leading, spacing: 32) {
-					Grid(alignment: .leading, horizontalSpacing: 8, verticalSpacing: 8) {
 
-						GridRow() {
-							Text("Name:")
-								.fontWeight(.semibold)
-								.gridColumnAlignment(.trailing)
-							Text(store.pokemon.name)
-						}
+					GroupBox("Details:") {
+						Grid(alignment: .leading, horizontalSpacing: 8, verticalSpacing: 8) {
+							GridRow() {
+								Text("Name:")
+									.fontWeight(.semibold)
+									.gridColumnAlignment(.trailing)
+								Text(store.pokemon.name)
+							}
 
-						GridRow {
-							Text("Height:")
-								.fontWeight(.semibold)
-							Text("\(store.pokemon.height)")
-						}
+							GridRow {
+								Text("Height:")
+									.fontWeight(.semibold)
+								Text("\(store.pokemon.height)")
+							}
 
-						GridRow {
-							Text("Weight:")
-								.fontWeight(.semibold)
-							Text("\(store.pokemon.weight)")
+							GridRow {
+								Text("Weight:")
+									.fontWeight(.semibold)
+								Text("\(store.pokemon.weight)")
+							}
 						}
+						.font(.system(size: 16))
 					}
-					.font(.system(size: 16))
-
-					PokemonConnectButton(store: store.scope(state: \.connectButton, action: \.connectButton))
-						.buttonStyle(.main)
 				}
 				.padding(.top, 8)
 				.padding(.horizontal, 16)
+
+				PokemonConnectButton(store: store.scope(state: \.connectButton, action: \.connectButton))
 			}
 		}
 		.navigationTitle(store.pokemon.name)
 		.toolbar(.hidden, for: .tabBar)
-	}
-}
-
-private extension Pokemon {
-	var info: [String : String] {
-		return [ "Name" : name,
-				 "Height" : "\(height)",
-				 "Weight" : "\(weight)"
-		]
 	}
 }
 

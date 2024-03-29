@@ -9,7 +9,7 @@ import ComposableArchitecture
 import SwiftUI
 
 struct PokemonsListView: View {
-	var store: StoreOf<PokemonsListFeature>
+	let store: StoreOf<PokemonsListFeature>
 
 	private let spacing: CGFloat = 8
 

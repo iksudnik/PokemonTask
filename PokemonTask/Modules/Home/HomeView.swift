@@ -96,7 +96,7 @@ struct HomeReducer {
 			case let .pokemons(.delegate(.pokemonTapped(pokemon))):
 				state.path.append(.pokemonDetails(.init(pokemon: pokemon)))
 				return .none
-
+				
 			case let .path(.element(id: _, action: .eventDetails(
 				.pokemons(.delegate(.pokemonTapped(pokemon)))))):
 				state.path.append(.pokemonDetails(.init(pokemon: pokemon)))

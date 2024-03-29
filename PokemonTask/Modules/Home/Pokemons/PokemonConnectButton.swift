@@ -20,7 +20,12 @@ struct PokemonConnectButtonFeature {
 	@CasePathable
 	enum Action {
 		case tapped
-		case updateIsConnected(Bool)
+		case delegate(Delegate)
+
+		@CasePathable
+		enum Delegate {
+			case updateIsConnected(Bool)
+		}
 	}
 
 	@Dependency(\.repository) var repository
@@ -32,10 +37,10 @@ struct PokemonConnectButtonFeature {
 				return .run { [pokemon = state.pokemon] send in
 					let isConnected = !pokemon.isConnected
 					try await repository.updatePokemonIsConnected(isConnected, pokemon.id)
-					await send(.updateIsConnected(isConnected), animation: .snappy)
+					await send(.delegate(.updateIsConnected(isConnected)), animation: .snappy)
 				}
 
-			case let .updateIsConnected(isConnected):
+			case let .delegate(.updateIsConnected(isConnected)):
 				state.pokemon.isConnected = isConnected
 				return .none
 			}
@@ -48,7 +53,7 @@ struct PokemonConnectButtonFeature {
 
 struct PokemonConnectButton: View {
 	let store: StoreOf<PokemonConnectButtonFeature>
-	
+
 	var body: some View {
 		Button(action: {
 			store.send(.tapped)
@@ -59,3 +64,10 @@ struct PokemonConnectButton: View {
 	}
 }
 
+// MARK: - Preview
+
+#Preview {
+	PokemonConnectButton(store: Store(initialState: .init(pokemon: .bulbasaur)) {
+		PokemonConnectButtonFeature()
+	})
+}
