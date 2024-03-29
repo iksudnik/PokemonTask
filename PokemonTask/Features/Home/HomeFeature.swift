@@ -26,11 +26,11 @@ struct HomeFeature {
 		var path = StackState<Path.State>()
 
 		var isLoading = false
+		var dataDidLoad = false
 	}
 
 	@CasePathable
 	enum Action {
-		case onAppear
 		case topBar(HomeTopBarFeature.Action)
 		case featuredEvent(FeaturedEventFeature.Action)
 		case events(EventsListFeature.Action)
@@ -38,6 +38,7 @@ struct HomeFeature {
 
 		case path(StackAction<Path.State, Path.Action>)
 
+		case onAppear
 		case initialFetchResponse(Result<HomeResponse, Error>)
 	}
 
@@ -48,6 +49,10 @@ struct HomeFeature {
 		Reduce { state, action in
 			switch action {
 			case .onAppear:
+				guard !state.dataDidLoad else {
+					return .none
+				}
+
 				state.isLoading = true
 				return .run { send in
 					let result = await Result { try await repository.homeData() }
@@ -56,6 +61,7 @@ struct HomeFeature {
 
 			case let .initialFetchResponse(result):
 				state.isLoading = false
+				state.dataDidLoad = true
 
 				switch result {
 				case let .success(response):
