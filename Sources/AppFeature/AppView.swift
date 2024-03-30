@@ -12,14 +12,14 @@ public struct AppView: View {
 	}
 
 	public var body: some View {
-		TabView {
-			HomeView(store: store.scope(state: \.homeTab, action: \.homeTab))
+		TabView(selection: $store.selection.sending(\.selected)) {
+			HomeView(store: store.scope(state: \.home, action: \.home))
 				.tabItem { Label("HOME", systemImage: "house") }
 
-			SearchView(store: store.scope(state: \.searchTab, action: \.searchTab))
+			SearchView(store: store.scope(state: \.search, action: \.search))
 				.tabItem { Label("SEARCH", systemImage: "magnifyingglass")}
 			
-			TicketsView(store: store.scope(state: \.ticketsTab, action: \.ticketsTab))
+			TicketsView(store: store.scope(state: \.tickets, action: \.tickets))
 				.tabItem { Label("TICKETS", systemImage: "ticket")}
 		}
 		.tint(.accent)

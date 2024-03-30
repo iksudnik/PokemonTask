@@ -9,26 +9,27 @@ public struct AppFeature {
 	@ObservableState
 	public struct State: Equatable {
 		public var selection: Selection
-		public var homeTab: HomeFeature.State
-		public var searchTab: SearchFeature.State
-		public var ticketsTab: TicketsFeature.State
+		public var home: HomeFeature.State
+		public var search: SearchFeature.State
+		public var tickets: TicketsFeature.State
 
 		public init(selection: AppFeature.Selection = .home,
-			 homeTab: HomeFeature.State = .init(),
-			 searchTab: SearchFeature.State = .init(),
-			 ticketsTab: TicketsFeature.State = .init()) {
+			 home: HomeFeature.State = .init(),
+			 search: SearchFeature.State = .init(),
+			 tickets: TicketsFeature.State = .init()) {
 			self.selection = selection
-			self.homeTab = homeTab
-			self.searchTab = searchTab
-			self.ticketsTab = ticketsTab
+			self.home = home
+			self.search = search
+			self.tickets = tickets
 		}
 	}
 
 	@CasePathable
 	public enum Action {
-		case homeTab(HomeFeature.Action)
-		case searchTab(SearchFeature.Action)
-		case ticketsTab(TicketsFeature.Action)
+		case selected(Selection)
+		case home(HomeFeature.Action)
+		case search(SearchFeature.Action)
+		case tickets(TicketsFeature.Action)
 	}
 
 	public enum Selection: Hashable {
@@ -40,20 +41,27 @@ public struct AppFeature {
 	public init() {}
 	
 	public var body: some ReducerOf<Self> {
-		Scope(state: \.homeTab, action: \.homeTab) {
+		Scope(state: \.home, action: \.home) {
 			HomeFeature()
 		}
 
-		Scope(state: \.searchTab, action: \.searchTab) {
+		Scope(state: \.search, action: \.search) {
 			SearchFeature()
 		}
 		
-		Scope(state: \.ticketsTab, action: \.ticketsTab) {
+		Scope(state: \.tickets, action: \.tickets) {
 			TicketsFeature()
 		}
 
 		Reduce { state, action in
-			return .none
+			switch action {
+
+			case let .selected(selection):
+				state.selection = selection
+				return .none
+			case .home, .search, .tickets:
+				return .none
+			}
 		}
 	}
 }

@@ -49,6 +49,10 @@ let package = Package(
 				.product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
 			]
 		),
+		.testTarget(
+			name: "AppFeatureTests",
+			dependencies: ["AppFeature"]
+		),
 		.target(
 			name: "DatabaseClient",
 			dependencies: [
@@ -92,6 +96,7 @@ let package = Package(
 				"FeaturedEventFeature",
 				"HomeTopBarFeature",
 				"EventDetailsFeature",
+				"EventsListFeature",
 				"Models",
 				"SwiftUIHelpers",
 				"PokemonDetailsFeature",
@@ -117,11 +122,16 @@ let package = Package(
 				"RepositoryClient",
 				.product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
 			]),
+		.testTarget(
+			name: "PokemonDetailsFeatureTests",
+			dependencies: ["PokemonDetailsFeature"]
+		),
 		.target(
 			name: "PokemonsListFeature",
 			dependencies: [
 				"Models",
 				"SwiftUIHelpers",
+				"RepositoryClient",
 				.product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
 			]),
 		.target(
