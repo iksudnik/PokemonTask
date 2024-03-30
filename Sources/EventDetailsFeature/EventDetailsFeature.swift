@@ -1,6 +1,7 @@
 import ComposableArchitecture
 import Models
 import PokemonsListFeature
+import RepositoryClient
 
 @Reducer
 public struct EventDetailsFeature {
@@ -21,7 +22,7 @@ public struct EventDetailsFeature {
 
 	@CasePathable
 	public enum Action {
-		case onAppear
+		case onTask
 		case pokemonsResponse(Result<[Pokemon], Error>)
 		case pokemons(PokemonsListFeature.Action)
 	}
@@ -35,7 +36,7 @@ public struct EventDetailsFeature {
 		Reduce { state, action in
 			switch action {
 
-			case .onAppear:
+			case .onTask:
 				state.isLoading = true
 				return .run { [pokemonIDs = state.event.pokemonIds] send in
 					let result = await Result { try await repository.pokemons(pokemonIDs) }
@@ -45,15 +46,12 @@ public struct EventDetailsFeature {
 			case let .pokemonsResponse(result):
 				switch result {
 				case let .success(pokemons):
-					state.pokemons = .init(pokemons: .init(
-						uniqueElements: pokemons.map { .init(pokemon: $0) }
-					))
+					state.pokemons = .init(pokemons: .init(uniqueElements: pokemons))
 					return .none
 
 				case .failure:
 					return .none
 				}
-
 			case .pokemons:
 				return .none
 			}

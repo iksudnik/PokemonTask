@@ -56,8 +56,8 @@ public struct HomeFeature {
 
 		case path(StackAction<Path.State, Path.Action>)
 
-		case onAppear
-		case initialFetchResponse(Result<HomeResponse, Error>)
+		case onTask
+		case homeResponseResult(Result<HomeResponse, Error>)
 	}
 
 	@Dependency(\.repository) var repository
@@ -68,24 +68,24 @@ public struct HomeFeature {
 
 		Reduce { state, action in
 			switch action {
-			case .onAppear:
+			case .onTask:
 				return .run { send in
 					let result = await Result { try await repository.homeData() }
-					await send(.initialFetchResponse(result))
+					await send(.homeResponseResult(result))
 				}
 
-			case let .initialFetchResponse(result):
+			case let .homeResponseResult(result):
 				state.loadingState = .loaded
 
 				switch result {
 				case let .success(response):
 					state.featuredEvent = .init(event: response.featuredEvent)
 					state.events = .init(events: .init(
-						uniqueElements: response.weaklyEvents.map { .init(event: $0) }
+						uniqueElements: response.weaklyEvents
 					))
 					if !response.popularPokemons.isEmpty {
 						state.pokemons = .init(pokemons: .init(
-							uniqueElements: response.popularPokemons.map { .init(pokemon: $0) }
+							uniqueElements: response.popularPokemons
 						))
 					}
 					return .none
@@ -99,12 +99,9 @@ public struct HomeFeature {
 					return .none
 				}
 
-			case let .events(.events(.element(_, action))):
-				switch action {
-				case let .delegate(.eventTapped(event)):
-					state.path.append(.eventDetails(EventDetailsFeature.State(event: event)))
-					return .none
-				}
+			case let .events(.delegate(.eventTapped(event))):
+				state.path.append(.eventDetails(EventDetailsFeature.State(event: event)))
+				return .none
 
 			case let .featuredEvent(.delegate(.eventTapped(event))):
 				state.path.append(.eventDetails(EventDetailsFeature.State(event: event)))

@@ -8,34 +8,35 @@ public struct PokemonDetailsFeature {
 	@ObservableState
 	public struct State: Equatable {
 		public var pokemon: Pokemon
-		public var connectButton: PokemonConnectButtonFeature.State
 
 		public init(pokemon: Pokemon) {
 			self.pokemon = pokemon
-			connectButton = .init(pokemon: pokemon)
 		}
 	}
 
 	public enum Action {
-		case connectButton(PokemonConnectButtonFeature.Action)
+		case connectButtonTapped
+		case updatePokemon(Pokemon)
 	}
+
+	@Dependency(\.repository) var repository
 
 	public init() {}
 
 	public var body: some ReducerOf<Self> {
-
-		Scope(state: \.connectButton, action: \.connectButton) {
-			PokemonConnectButtonFeature()
-		}
-
 		Reduce { state, action in
 			switch action {
-			case let .connectButton(.delegate(.updateIsConnected(isConnected))):
-				state.pokemon.isConnected = isConnected
+			case let .updatePokemon(pokemon):
+				state.pokemon = pokemon
 				return .none
 
-			case .connectButton:
-				return .none
+			case .connectButtonTapped:
+				return .run { [pokemon = state.pokemon] send in
+					var updatedPokemon = pokemon
+					updatedPokemon.isConnected.toggle()
+					try await repository.updatePokemonIsConnected(updatedPokemon.isConnected, updatedPokemon.id)
+					await send(.updatePokemon(updatedPokemon))
+				}
 			}
 		}
 	}

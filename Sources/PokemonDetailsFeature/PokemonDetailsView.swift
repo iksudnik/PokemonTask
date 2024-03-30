@@ -1,7 +1,6 @@
 import ComposableArchitecture
 import SwiftUI
 import SwiftUIHelpers
-import PokemonConnectButtonFeature
 
 public struct PokemonDetailsView: View {
 	let store: StoreOf<PokemonDetailsFeature>
@@ -47,7 +46,9 @@ public struct PokemonDetailsView: View {
 						.font(.system(size: 16))
 					}
 
-					PokemonConnectButton(store: store.scope(state: \.connectButton, action: \.connectButton))
+					ConnectButton(isConnected: store.pokemon.isConnected) {
+						store.send(.connectButtonTapped)
+					}
 				}
 				.padding(.top, 8)
 				.padding(.horizontal, 16)

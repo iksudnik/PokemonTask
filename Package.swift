@@ -10,7 +10,6 @@ let package = Package(
 		.library(name: "ApiClient", targets: ["ApiClient"]),
 		.library(name: "AppFeature", targets: ["AppFeature"]),
 		.library(name: "DatabaseClient", targets: ["DatabaseClient"]),
-		.library(name: "EventItemFeature", targets: ["EventItemFeature"]),
 		.library(name: "EventDetailsFeature", targets: ["EventDetailsFeature"]),
 		.library(name: "EventsListFeature", targets: ["EventsListFeature"]),
 		.library(name: "FeaturedEventFeature", targets: ["FeaturedEventFeature"]),
@@ -19,8 +18,6 @@ let package = Package(
 		.library(name: "HomeTopBarFeature", targets: ["HomeTopBarFeature"]),
 		.library(name: "Models", targets: ["Models"]),
 		.library(name: "Mocks", targets: ["Mocks"]),
-		.library(name: "PokemonConnectButtonFeature", targets: ["PokemonConnectButtonFeature"]),
-		.library(name: "PokemonItemFeature", targets: ["PokemonItemFeature"]),
 		.library(name: "PokemonDetailsFeature", targets: ["PokemonDetailsFeature"]),
 		.library(name: "PokemonsListFeature", targets: ["PokemonsListFeature"]),
 		.library(name: "RepositoryClient", targets: ["RepositoryClient"]),
@@ -62,12 +59,6 @@ let package = Package(
 			]
 		),
 		.target(
-			name: "EventItemFeature",
-			dependencies: [
-				"Models",
-				.product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
-			]),
-		.target(
 			name: "EventDetailsFeature",
 			dependencies: [
 				"Models",
@@ -78,8 +69,8 @@ let package = Package(
 		.target(
 			name: "EventsListFeature",
 			dependencies: [
-				"EventItemFeature",
 				"Models",
+				"SwiftUIHelpers",
 				.product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
 			]),
 		.target(
@@ -122,23 +113,6 @@ let package = Package(
 			name: "PokemonDetailsFeature",
 			dependencies: [
 				"Models",
-				"PokemonConnectButtonFeature",
-				"SwiftUIHelpers",
-				.product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
-			]),
-		.target(
-			name: "PokemonItemFeature",
-			dependencies: [
-				"Models",
-				"SwiftUIHelpers",
-				"PokemonConnectButtonFeature",
-				.product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
-			]),
-		.target(
-			name: "PokemonConnectButtonFeature",
-			dependencies: [
-				"Models",
-				"RepositoryClient",
 				"SwiftUIHelpers",
 				.product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
 			]),
@@ -146,7 +120,7 @@ let package = Package(
 			name: "PokemonsListFeature",
 			dependencies: [
 				"Models",
-				"PokemonItemFeature",
+				"SwiftUIHelpers",
 				.product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
 			]),
 		.target(

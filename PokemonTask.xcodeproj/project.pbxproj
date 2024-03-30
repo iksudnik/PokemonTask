@@ -11,7 +11,6 @@
 		E176BD072BB73C4200FEDA49 /* ApiClient in Frameworks */ = {isa = PBXBuildFile; productRef = E176BD062BB73C4200FEDA49 /* ApiClient */; };
 		E176BD092BB73C4200FEDA49 /* DatabaseClient in Frameworks */ = {isa = PBXBuildFile; productRef = E176BD082BB73C4200FEDA49 /* DatabaseClient */; };
 		E176BD0B2BB73C4200FEDA49 /* EventDetailsFeature in Frameworks */ = {isa = PBXBuildFile; productRef = E176BD0A2BB73C4200FEDA49 /* EventDetailsFeature */; };
-		E176BD0D2BB73C4200FEDA49 /* EventItemFeature in Frameworks */ = {isa = PBXBuildFile; productRef = E176BD0C2BB73C4200FEDA49 /* EventItemFeature */; };
 		E176BD0F2BB73C4200FEDA49 /* EventsListFeature in Frameworks */ = {isa = PBXBuildFile; productRef = E176BD0E2BB73C4200FEDA49 /* EventsListFeature */; };
 		E176BD112BB73C4200FEDA49 /* FeaturedEventFeature in Frameworks */ = {isa = PBXBuildFile; productRef = E176BD102BB73C4200FEDA49 /* FeaturedEventFeature */; };
 		E176BD132BB73C4200FEDA49 /* Helpers in Frameworks */ = {isa = PBXBuildFile; productRef = E176BD122BB73C4200FEDA49 /* Helpers */; };
@@ -19,9 +18,7 @@
 		E176BD172BB73C4200FEDA49 /* HomeTopBarFeature in Frameworks */ = {isa = PBXBuildFile; productRef = E176BD162BB73C4200FEDA49 /* HomeTopBarFeature */; };
 		E176BD192BB73C4200FEDA49 /* Mocks in Frameworks */ = {isa = PBXBuildFile; productRef = E176BD182BB73C4200FEDA49 /* Mocks */; };
 		E176BD1B2BB73C4200FEDA49 /* Models in Frameworks */ = {isa = PBXBuildFile; productRef = E176BD1A2BB73C4200FEDA49 /* Models */; };
-		E176BD1D2BB73C4200FEDA49 /* PokemonConnectButtonFeature in Frameworks */ = {isa = PBXBuildFile; productRef = E176BD1C2BB73C4200FEDA49 /* PokemonConnectButtonFeature */; };
 		E176BD1F2BB73C4200FEDA49 /* PokemonDetailsFeature in Frameworks */ = {isa = PBXBuildFile; productRef = E176BD1E2BB73C4200FEDA49 /* PokemonDetailsFeature */; };
-		E176BD212BB73C4200FEDA49 /* PokemonItemFeature in Frameworks */ = {isa = PBXBuildFile; productRef = E176BD202BB73C4200FEDA49 /* PokemonItemFeature */; };
 		E176BD232BB73C4200FEDA49 /* PokemonsListFeature in Frameworks */ = {isa = PBXBuildFile; productRef = E176BD222BB73C4200FEDA49 /* PokemonsListFeature */; };
 		E176BD252BB73C4200FEDA49 /* RepositoryClient in Frameworks */ = {isa = PBXBuildFile; productRef = E176BD242BB73C4200FEDA49 /* RepositoryClient */; };
 		E176BD272BB73C4200FEDA49 /* SearchFeature in Frameworks */ = {isa = PBXBuildFile; productRef = E176BD262BB73C4200FEDA49 /* SearchFeature */; };
@@ -47,7 +44,6 @@
 			files = (
 				E176BD192BB73C4200FEDA49 /* Mocks in Frameworks */,
 				E176BD2B2BB73C4200FEDA49 /* TicketsFeature in Frameworks */,
-				E176BD212BB73C4200FEDA49 /* PokemonItemFeature in Frameworks */,
 				E176BD072BB73C4200FEDA49 /* ApiClient in Frameworks */,
 				E176BD112BB73C4200FEDA49 /* FeaturedEventFeature in Frameworks */,
 				E176BD152BB73C4200FEDA49 /* HomeFeature in Frameworks */,
@@ -57,12 +53,10 @@
 				E176BD132BB73C4200FEDA49 /* Helpers in Frameworks */,
 				E176BD232BB73C4200FEDA49 /* PokemonsListFeature in Frameworks */,
 				E176BD052BB7382B00FEDA49 /* AppFeature in Frameworks */,
-				E176BD1D2BB73C4200FEDA49 /* PokemonConnectButtonFeature in Frameworks */,
 				E176BD272BB73C4200FEDA49 /* SearchFeature in Frameworks */,
 				E176BD1B2BB73C4200FEDA49 /* Models in Frameworks */,
 				E176BD0F2BB73C4200FEDA49 /* EventsListFeature in Frameworks */,
 				E176BD172BB73C4200FEDA49 /* HomeTopBarFeature in Frameworks */,
-				E176BD0D2BB73C4200FEDA49 /* EventItemFeature in Frameworks */,
 				E176BD092BB73C4200FEDA49 /* DatabaseClient in Frameworks */,
 				E176BD0B2BB73C4200FEDA49 /* EventDetailsFeature in Frameworks */,
 			);
@@ -143,7 +137,6 @@
 				E176BD062BB73C4200FEDA49 /* ApiClient */,
 				E176BD082BB73C4200FEDA49 /* DatabaseClient */,
 				E176BD0A2BB73C4200FEDA49 /* EventDetailsFeature */,
-				E176BD0C2BB73C4200FEDA49 /* EventItemFeature */,
 				E176BD0E2BB73C4200FEDA49 /* EventsListFeature */,
 				E176BD102BB73C4200FEDA49 /* FeaturedEventFeature */,
 				E176BD122BB73C4200FEDA49 /* Helpers */,
@@ -151,9 +144,7 @@
 				E176BD162BB73C4200FEDA49 /* HomeTopBarFeature */,
 				E176BD182BB73C4200FEDA49 /* Mocks */,
 				E176BD1A2BB73C4200FEDA49 /* Models */,
-				E176BD1C2BB73C4200FEDA49 /* PokemonConnectButtonFeature */,
 				E176BD1E2BB73C4200FEDA49 /* PokemonDetailsFeature */,
-				E176BD202BB73C4200FEDA49 /* PokemonItemFeature */,
 				E176BD222BB73C4200FEDA49 /* PokemonsListFeature */,
 				E176BD242BB73C4200FEDA49 /* RepositoryClient */,
 				E176BD262BB73C4200FEDA49 /* SearchFeature */,
@@ -448,10 +439,6 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = EventDetailsFeature;
 		};
-		E176BD0C2BB73C4200FEDA49 /* EventItemFeature */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = EventItemFeature;
-		};
 		E176BD0E2BB73C4200FEDA49 /* EventsListFeature */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = EventsListFeature;
@@ -480,17 +467,9 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = Models;
 		};
-		E176BD1C2BB73C4200FEDA49 /* PokemonConnectButtonFeature */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = PokemonConnectButtonFeature;
-		};
 		E176BD1E2BB73C4200FEDA49 /* PokemonDetailsFeature */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = PokemonDetailsFeature;
-		};
-		E176BD202BB73C4200FEDA49 /* PokemonItemFeature */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = PokemonItemFeature;
 		};
 		E176BD222BB73C4200FEDA49 /* PokemonsListFeature */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -48,7 +48,7 @@ public struct EventDetailsView: View {
 		.scrollIndicators(.hidden)
 		.toolbar(.hidden, for: .tabBar)
 		.task {
-			store.send(.onAppear)
+			store.send(.onTask)
 		}
 	}
 }

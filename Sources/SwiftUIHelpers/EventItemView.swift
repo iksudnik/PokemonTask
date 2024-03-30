@@ -1,12 +1,12 @@
-import ComposableArchitecture
 import SwiftUI
+import Models
 import Mocks
 
 public struct EventItemView: View {
-	let store: StoreOf<EventItemFeature>
+	var event: Event
 
-	public init(store: StoreOf<EventItemFeature>) {
-		self.store = store
+	public init(event: Event) {
+		self.event = event
 	}
 
 	public var body: some View {
@@ -14,7 +14,7 @@ public struct EventItemView: View {
 			Color.secondary
 				.aspectRatio(1, contentMode: .fit)
 				.overlay {
-					Image(store.event.image)
+					Image(event.image)
 						.resizable()
 						.scaledToFill()
 				}
@@ -22,12 +22,12 @@ public struct EventItemView: View {
 				.cornerRadius(8)
 
 			VStack(alignment: .leading, spacing: 4) {
-				Text(store.event.title)
+				Text(event.title)
 					.font(.system(size: 16))
 					.multilineTextAlignment(.leading)
 				Group {
-					Text(store.event.dateString)
-					Text(store.event.location)
+					Text(event.dateString)
+					Text(event.location)
 				}
 				.font(.system(size: 16))
 				.foregroundStyle(.secondary)
@@ -35,20 +35,12 @@ public struct EventItemView: View {
 			.padding(.vertical, 8)
 		}
 		.frame(maxHeight: .infinity, alignment: .top)
-		.onTapGesture {
-			store.send(.delegate(.eventTapped(store.event)))
-		}
 	}
 }
 
 // MARK: - Previews
 
 #Preview {
-	EventItemView(
-		store: Store(
-			initialState: EventItemFeature.State(event: .event1)) {
-				EventItemFeature()
-			}
-	)
+	EventItemView(event: .event1)
 }
 

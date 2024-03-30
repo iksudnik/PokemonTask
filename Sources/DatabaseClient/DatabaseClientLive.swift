@@ -31,7 +31,6 @@ extension DatabaseClient: DependencyKey {
 		}()
 
 		return Self(
-
 			pokemon: { id in
 				let request = PokemonEntity.fetchRequest()
 				request.predicate = NSPredicate(format: "id == %@", NSNumber(value: id))
@@ -64,10 +63,10 @@ extension DatabaseClient: DependencyKey {
 					entity.isConnected = isConnected
 					try viewContext.save()
 				}
-			})
+			}
+		)
 	}
 }
-
 
 extension PokemonEntity {
 	func toPokemon() -> Pokemon {

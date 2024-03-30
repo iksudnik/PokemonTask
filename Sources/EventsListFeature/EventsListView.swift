@@ -1,6 +1,7 @@
 import ComposableArchitecture
 import EventItemFeature
 import SwiftUI
+import SwiftUIHelpers
 
 public struct EventsListView: View {
 	var store: StoreOf<EventsListFeature>
@@ -14,8 +15,11 @@ public struct EventsListView: View {
 	public var body: some View {
 		ScrollView(.horizontal) {
 			LazyHStack(spacing: spacing) {
-				ForEach(store.scope(state: \.events, action: \.events)) { event in
-					EventItemView(store: event)
+				ForEach(store.events) { event in
+					EventItemView(event: event)
+						.onTapGesture {
+							store.send(.delegate(.eventTapped(event)))
+						}
 						.containerRelativeFrame(.horizontal,
 												count: 21,
 												span: 10,

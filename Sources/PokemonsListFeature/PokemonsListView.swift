@@ -1,6 +1,6 @@
 import ComposableArchitecture
 import SwiftUI
-import PokemonItemFeature
+import SwiftUIHelpers
 
 public struct PokemonsListView: View {
 	let store: StoreOf<PokemonsListFeature>
@@ -14,15 +14,18 @@ public struct PokemonsListView: View {
 	public var body: some View {
 		ScrollView(.horizontal) {
 			LazyHStack(spacing: spacing) {
-				ForEach(store.scope(state: \.pokemons, action: \.pokemons)) { pokemon in
-					PokemonItemView(store: pokemon)
-						.containerRelativeFrame(.horizontal,
-												count: 5,
-												span: 2,
-												spacing: spacing)
-						.onTapGesture {
-							store.send(.delegate(.pokemonTapped(pokemon.pokemon)))
-						}
+				ForEach(store.pokemons) { pokemon in
+					PokemonItemView(pokemon: pokemon,
+									onConnectButtonTap: {
+						store.send(.pokemonConnectButtonTapped(pokemon))
+					})
+					.onTapGesture {
+						store.send(.delegate(.pokemonTapped(pokemon)))
+					}
+					.containerRelativeFrame(.horizontal,
+											count: 5,
+											span: 2,
+											spacing: spacing)
 				}
 			}
 		}

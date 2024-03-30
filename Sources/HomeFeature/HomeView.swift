@@ -72,7 +72,7 @@ public struct HomeView: View {
 			.padding(.horizontal, 12)
 			.background(Color(.systemGray6))
 			.task {
-				store.send(.onAppear)
+				store.send(.onTask)
 			}
 		} destination: { store in
 			switch store.case {
