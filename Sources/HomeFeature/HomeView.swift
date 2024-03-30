@@ -59,7 +59,7 @@ public struct HomeView: View {
 							}
 
 							if let store = store.scope(state: \.pokemons, action: \.pokemons) {
-								SectionView(title: "Popular Pokemon") {
+								SectionView(title: "Popular Pokemons") {
 									PokemonsListView(store: store)
 								}
 							}

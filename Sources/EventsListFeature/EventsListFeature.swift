@@ -1,5 +1,4 @@
 import ComposableArchitecture
-import EventItemFeature
 import Models
 
 @Reducer

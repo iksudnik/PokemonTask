@@ -114,6 +114,7 @@ let package = Package(
 			dependencies: [
 				"Models",
 				"SwiftUIHelpers",
+				"RepositoryClient",
 				.product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
 			]),
 		.target(
@@ -142,6 +143,8 @@ let package = Package(
 		.target(
 			name: "SwiftUIHelpers",
 			dependencies: [
+				"Mocks",
+				"Models",
 				.product(name: "SDWebImageSwiftUI", package: "SDWebImageSwiftUI"),
 			]),
 		.target(

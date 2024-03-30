@@ -1,6 +1,6 @@
 import ComposableArchitecture
 import Models
-import PokemonConnectButtonFeature
+import RepositoryClient
 
 @Reducer
 public struct PokemonDetailsFeature {
