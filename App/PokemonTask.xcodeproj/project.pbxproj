@@ -7,34 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E176BD052BB7382B00FEDA49 /* AppFeature in Frameworks */ = {isa = PBXBuildFile; productRef = E176BD042BB7382B00FEDA49 /* AppFeature */; };
-		E176BD072BB73C4200FEDA49 /* ApiClient in Frameworks */ = {isa = PBXBuildFile; productRef = E176BD062BB73C4200FEDA49 /* ApiClient */; };
-		E176BD092BB73C4200FEDA49 /* DatabaseClient in Frameworks */ = {isa = PBXBuildFile; productRef = E176BD082BB73C4200FEDA49 /* DatabaseClient */; };
-		E176BD0B2BB73C4200FEDA49 /* EventDetailsFeature in Frameworks */ = {isa = PBXBuildFile; productRef = E176BD0A2BB73C4200FEDA49 /* EventDetailsFeature */; };
-		E176BD0F2BB73C4200FEDA49 /* EventsListFeature in Frameworks */ = {isa = PBXBuildFile; productRef = E176BD0E2BB73C4200FEDA49 /* EventsListFeature */; };
-		E176BD112BB73C4200FEDA49 /* FeaturedEventFeature in Frameworks */ = {isa = PBXBuildFile; productRef = E176BD102BB73C4200FEDA49 /* FeaturedEventFeature */; };
-		E176BD132BB73C4200FEDA49 /* Helpers in Frameworks */ = {isa = PBXBuildFile; productRef = E176BD122BB73C4200FEDA49 /* Helpers */; };
-		E176BD152BB73C4200FEDA49 /* HomeFeature in Frameworks */ = {isa = PBXBuildFile; productRef = E176BD142BB73C4200FEDA49 /* HomeFeature */; };
-		E176BD172BB73C4200FEDA49 /* HomeTopBarFeature in Frameworks */ = {isa = PBXBuildFile; productRef = E176BD162BB73C4200FEDA49 /* HomeTopBarFeature */; };
-		E176BD192BB73C4200FEDA49 /* Mocks in Frameworks */ = {isa = PBXBuildFile; productRef = E176BD182BB73C4200FEDA49 /* Mocks */; };
-		E176BD1B2BB73C4200FEDA49 /* Models in Frameworks */ = {isa = PBXBuildFile; productRef = E176BD1A2BB73C4200FEDA49 /* Models */; };
-		E176BD1F2BB73C4200FEDA49 /* PokemonDetailsFeature in Frameworks */ = {isa = PBXBuildFile; productRef = E176BD1E2BB73C4200FEDA49 /* PokemonDetailsFeature */; };
-		E176BD232BB73C4200FEDA49 /* PokemonsListFeature in Frameworks */ = {isa = PBXBuildFile; productRef = E176BD222BB73C4200FEDA49 /* PokemonsListFeature */; };
-		E176BD252BB73C4200FEDA49 /* RepositoryClient in Frameworks */ = {isa = PBXBuildFile; productRef = E176BD242BB73C4200FEDA49 /* RepositoryClient */; };
-		E176BD272BB73C4200FEDA49 /* SearchFeature in Frameworks */ = {isa = PBXBuildFile; productRef = E176BD262BB73C4200FEDA49 /* SearchFeature */; };
-		E176BD292BB73C4200FEDA49 /* SwiftUIHelpers in Frameworks */ = {isa = PBXBuildFile; productRef = E176BD282BB73C4200FEDA49 /* SwiftUIHelpers */; };
-		E176BD2B2BB73C4200FEDA49 /* TicketsFeature in Frameworks */ = {isa = PBXBuildFile; productRef = E176BD2A2BB73C4200FEDA49 /* TicketsFeature */; };
+		E119AC562BB9664C00E99B94 /* AppFeature in Frameworks */ = {isa = PBXBuildFile; productRef = E119AC552BB9664C00E99B94 /* AppFeature */; };
 		E1D45BD02BB18C4B00F0F48E /* PokemonTaskApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D45BCF2BB18C4B00F0F48E /* PokemonTaskApp.swift */; };
 		E1D45BD42BB18C4F00F0F48E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E1D45BD32BB18C4F00F0F48E /* Assets.xcassets */; };
-		E1D45BD72BB18C4F00F0F48E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E1D45BD62BB18C4F00F0F48E /* Preview Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		E176BCD42BB702DB00FEDA49 /* PokemonTask */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = PokemonTask; sourceTree = "<group>"; };
+		E119AC532BB95F3000E99B94 /* PokemonTask */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = PokemonTask; path = ..; sourceTree = "<group>"; };
 		E1D45BCC2BB18C4B00F0F48E /* PokemonTask.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PokemonTask.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1D45BCF2BB18C4B00F0F48E /* PokemonTaskApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonTaskApp.swift; sourceTree = "<group>"; };
 		E1D45BD32BB18C4F00F0F48E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		E1D45BD62BB18C4F00F0F48E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -42,23 +24,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E176BD192BB73C4200FEDA49 /* Mocks in Frameworks */,
-				E176BD2B2BB73C4200FEDA49 /* TicketsFeature in Frameworks */,
-				E176BD072BB73C4200FEDA49 /* ApiClient in Frameworks */,
-				E176BD112BB73C4200FEDA49 /* FeaturedEventFeature in Frameworks */,
-				E176BD152BB73C4200FEDA49 /* HomeFeature in Frameworks */,
-				E176BD252BB73C4200FEDA49 /* RepositoryClient in Frameworks */,
-				E176BD292BB73C4200FEDA49 /* SwiftUIHelpers in Frameworks */,
-				E176BD1F2BB73C4200FEDA49 /* PokemonDetailsFeature in Frameworks */,
-				E176BD132BB73C4200FEDA49 /* Helpers in Frameworks */,
-				E176BD232BB73C4200FEDA49 /* PokemonsListFeature in Frameworks */,
-				E176BD052BB7382B00FEDA49 /* AppFeature in Frameworks */,
-				E176BD272BB73C4200FEDA49 /* SearchFeature in Frameworks */,
-				E176BD1B2BB73C4200FEDA49 /* Models in Frameworks */,
-				E176BD0F2BB73C4200FEDA49 /* EventsListFeature in Frameworks */,
-				E176BD172BB73C4200FEDA49 /* HomeTopBarFeature in Frameworks */,
-				E176BD092BB73C4200FEDA49 /* DatabaseClient in Frameworks */,
-				E176BD0B2BB73C4200FEDA49 /* EventDetailsFeature in Frameworks */,
+				E119AC562BB9664C00E99B94 /* AppFeature in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -75,8 +41,9 @@
 		E1D45BC32BB18C4B00F0F48E = {
 			isa = PBXGroup;
 			children = (
-				E176BCD42BB702DB00FEDA49 /* PokemonTask */,
-				E1D45BCE2BB18C4B00F0F48E /* App */,
+				E119AC532BB95F3000E99B94 /* PokemonTask */,
+				E1D45BF92BB18C6800F0F48E /* Resources */,
+				E1D45BCF2BB18C4B00F0F48E /* PokemonTaskApp.swift */,
 				E1D45BCD2BB18C4B00F0F48E /* Products */,
 				E176BCD52BB7031B00FEDA49 /* Frameworks */,
 			);
@@ -90,28 +57,10 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		E1D45BCE2BB18C4B00F0F48E /* App */ = {
-			isa = PBXGroup;
-			children = (
-				E1D45BF92BB18C6800F0F48E /* Resources */,
-				E1D45BCF2BB18C4B00F0F48E /* PokemonTaskApp.swift */,
-			);
-			path = App;
-			sourceTree = "<group>";
-		};
-		E1D45BD52BB18C4F00F0F48E /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				E1D45BD62BB18C4F00F0F48E /* Preview Assets.xcassets */,
-			);
-			path = "Preview Content";
-			sourceTree = "<group>";
-		};
 		E1D45BF92BB18C6800F0F48E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
 				E1D45BD32BB18C4F00F0F48E /* Assets.xcassets */,
-				E1D45BD52BB18C4F00F0F48E /* Preview Content */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -133,23 +82,7 @@
 			);
 			name = PokemonTask;
 			packageProductDependencies = (
-				E176BD042BB7382B00FEDA49 /* AppFeature */,
-				E176BD062BB73C4200FEDA49 /* ApiClient */,
-				E176BD082BB73C4200FEDA49 /* DatabaseClient */,
-				E176BD0A2BB73C4200FEDA49 /* EventDetailsFeature */,
-				E176BD0E2BB73C4200FEDA49 /* EventsListFeature */,
-				E176BD102BB73C4200FEDA49 /* FeaturedEventFeature */,
-				E176BD122BB73C4200FEDA49 /* Helpers */,
-				E176BD142BB73C4200FEDA49 /* HomeFeature */,
-				E176BD162BB73C4200FEDA49 /* HomeTopBarFeature */,
-				E176BD182BB73C4200FEDA49 /* Mocks */,
-				E176BD1A2BB73C4200FEDA49 /* Models */,
-				E176BD1E2BB73C4200FEDA49 /* PokemonDetailsFeature */,
-				E176BD222BB73C4200FEDA49 /* PokemonsListFeature */,
-				E176BD242BB73C4200FEDA49 /* RepositoryClient */,
-				E176BD262BB73C4200FEDA49 /* SearchFeature */,
-				E176BD282BB73C4200FEDA49 /* SwiftUIHelpers */,
-				E176BD2A2BB73C4200FEDA49 /* TicketsFeature */,
+				E119AC552BB9664C00E99B94 /* AppFeature */,
 			);
 			productName = PokemonTask;
 			productReference = E1D45BCC2BB18C4B00F0F48E /* PokemonTask.app */;
@@ -195,7 +128,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E1D45BD72BB18C4F00F0F48E /* Preview Assets.xcassets in Resources */,
 				E1D45BD42BB18C4F00F0F48E /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -340,7 +272,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"App/Resources/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 7SX728UU78;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -374,7 +306,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"App/Resources/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 7SX728UU78;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -425,73 +357,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		E176BD042BB7382B00FEDA49 /* AppFeature */ = {
+		E119AC552BB9664C00E99B94 /* AppFeature */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = AppFeature;
-		};
-		E176BD062BB73C4200FEDA49 /* ApiClient */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = ApiClient;
-		};
-		E176BD082BB73C4200FEDA49 /* DatabaseClient */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = DatabaseClient;
-		};
-		E176BD0A2BB73C4200FEDA49 /* EventDetailsFeature */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = EventDetailsFeature;
-		};
-		E176BD0E2BB73C4200FEDA49 /* EventsListFeature */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = EventsListFeature;
-		};
-		E176BD102BB73C4200FEDA49 /* FeaturedEventFeature */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = FeaturedEventFeature;
-		};
-		E176BD122BB73C4200FEDA49 /* Helpers */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Helpers;
-		};
-		E176BD142BB73C4200FEDA49 /* HomeFeature */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = HomeFeature;
-		};
-		E176BD162BB73C4200FEDA49 /* HomeTopBarFeature */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = HomeTopBarFeature;
-		};
-		E176BD182BB73C4200FEDA49 /* Mocks */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Mocks;
-		};
-		E176BD1A2BB73C4200FEDA49 /* Models */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Models;
-		};
-		E176BD1E2BB73C4200FEDA49 /* PokemonDetailsFeature */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = PokemonDetailsFeature;
-		};
-		E176BD222BB73C4200FEDA49 /* PokemonsListFeature */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = PokemonsListFeature;
-		};
-		E176BD242BB73C4200FEDA49 /* RepositoryClient */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = RepositoryClient;
-		};
-		E176BD262BB73C4200FEDA49 /* SearchFeature */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = SearchFeature;
-		};
-		E176BD282BB73C4200FEDA49 /* SwiftUIHelpers */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = SwiftUIHelpers;
-		};
-		E176BD2A2BB73C4200FEDA49 /* TicketsFeature */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = TicketsFeature;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

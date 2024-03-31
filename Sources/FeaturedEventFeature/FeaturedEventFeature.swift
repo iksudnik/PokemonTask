@@ -1,10 +1,3 @@
-//
-//  FeaturedEventFeature.swift
-//  PokemonTask
-//
-//  Created by Ilya Sudnik on 29.03.24.
-//
-
 import ComposableArchitecture
 import Models
 

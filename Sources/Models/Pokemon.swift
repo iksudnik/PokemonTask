@@ -34,7 +34,7 @@ public struct Pokemon: Decodable, Identifiable, Equatable {
 		order = try container.decode(Int32.self, forKey: .order)
 
 		let rawName = try container.decode(String.self, forKey: .name)
-		self.name = rawName.capitalizingFirstLetter()
+		self.name = rawName.capitalized
 
 		if let spritesContainer = try? container.nestedContainer(keyedBy: SpritesCodingKeys.self, forKey: .sprites),
 		   let otherContainer = try? spritesContainer.nestedContainer(keyedBy: OtherSpritesCodingKeys.self, forKey: .other),

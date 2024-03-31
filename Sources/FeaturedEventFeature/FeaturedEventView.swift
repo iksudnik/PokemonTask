@@ -1,10 +1,3 @@
-//
-//  FeaturedEventView.swift
-//  PokemonTask
-//
-//  Created by Ilya Sudnik on 25.03.24.
-//
-
 import ComposableArchitecture
 import Mocks
 import SwiftUI
