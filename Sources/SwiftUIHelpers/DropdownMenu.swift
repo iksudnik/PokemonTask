@@ -19,7 +19,7 @@ public struct DropdownMenu<Item>: View where Item: CustomStringConvertible {
 	}
 
 	public var body: some View {
-		ZStack(alignment: .leading) {
+		ZStack {
 			Text(String(describing: items[selectedIndex]))
 				.font(.system(size: 20, weight: .semibold))
 				.padding(.bottom, 4)
@@ -55,7 +55,6 @@ public struct DropdownMenu<Item>: View where Item: CustomStringConvertible {
 							.background(.black.opacity(0.5))
 							.fixedSize()
 							.transition(.opacity)
-							.transition(.push(from: .bottom))
 						}
 					}
 					.alignmentGuide(.bottom) { $0[.top] }
