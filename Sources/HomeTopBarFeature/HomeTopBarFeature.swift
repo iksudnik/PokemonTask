@@ -2,7 +2,7 @@ import ComposableArchitecture
 import Models
 
 @Reducer
-public struct HomeTopBarFeature {
+public struct HomeTopBarFeature: Sendable {
 	@ObservableState
 	public struct State: Equatable {
 		public var isLoggedIn: Bool
@@ -14,16 +14,20 @@ public struct HomeTopBarFeature {
 		}
 	}
 
-	public enum Action {
+	public enum Action: Sendable {
 		case delegate(Delegate)
 
 		@CasePathable
-		public enum Delegate {
+		public enum Delegate: Sendable {
 			case loginButtonTapped
 			case locationSelected(Location)
 		}
 	}
 
 	public init() {}
+
+	public var body: some ReducerOf<Self> {
+		EmptyReducer()
+	}
 }
 

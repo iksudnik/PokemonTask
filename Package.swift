@@ -3,6 +3,11 @@
 
 import PackageDescription
 
+let settings: [SwiftSetting] = [
+  .enableExperimentalFeature("StrictConcurrency"),
+  .enableExperimentalFeature("InferSendableFromCaptures")
+]
+
 let package = Package(
 	name: "PokemonTask",
 	platforms: [.iOS(.v17)],
@@ -38,7 +43,8 @@ let package = Package(
 				"Mocks",
 				.product(name: "Dependencies", package: "swift-dependencies"),
 				.product(name: "DependenciesMacros", package: "swift-dependencies"),
-			]
+			],
+			swiftSettings: settings
 		),
 		.target(
 			name: "AppFeature",
@@ -47,11 +53,13 @@ let package = Package(
 				"SearchFeature",
 				"TicketsFeature",
 				.product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
-			]
+			],
+			swiftSettings: settings
 		),
 		.testTarget(
 			name: "AppFeatureTests",
-			dependencies: ["AppFeature"]
+			dependencies: ["AppFeature"],
+			swiftSettings: settings
 		),
 		.target(
 			name: "DatabaseClient",
@@ -60,7 +68,8 @@ let package = Package(
 				"Mocks",
 				.product(name: "Dependencies", package: "swift-dependencies"),
 				.product(name: "DependenciesMacros", package: "swift-dependencies"),
-			]
+			],
+			swiftSettings: settings
 		),
 		.target(
 			name: "EventDetailsFeature",
@@ -69,27 +78,37 @@ let package = Package(
 				"SwiftUIHelpers",
 				"PokemonsListFeature",
 				.product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
-			]),
+			],
+			swiftSettings: settings
+		),
 		.target(
 			name: "EventsListFeature",
 			dependencies: [
 				"Models",
 				"SwiftUIHelpers",
 				.product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
-			]),
+			],
+			swiftSettings: settings
+		),
 		.target(
 			name: "FeaturedEventFeature",
 			dependencies: [
 				"Models",
 				"SwiftUIHelpers",
 				.product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
-			]),
-		.target(name: "Helpers"),
+			],
+			swiftSettings: settings
+		),
+		.target(name: "Helpers",
+				swiftSettings: settings
+			   ),
 		.target(
 			name: "Models",
 			dependencies: [
 				"Helpers",
-			]),
+			],
+			swiftSettings: settings
+		),
 		.target(
 			name: "HomeFeature",
 			dependencies: [
@@ -102,7 +121,9 @@ let package = Package(
 				"PokemonDetailsFeature",
 				"PokemonsListFeature",
 				.product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
-			]),
+			],
+			swiftSettings: settings
+		),
 		.target(
 			name: "HomeTopBarFeature",
 			dependencies: [
@@ -110,12 +131,16 @@ let package = Package(
 				"Models",
 				"SwiftUIHelpers",
 				.product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
-			]),
+			],
+			swiftSettings: settings
+		),
 		.target(
 			name: "Mocks",
 			dependencies: [
 				"Models",
-			]),
+			],
+			swiftSettings: settings
+		),
 		.target(
 			name: "PokemonDetailsFeature",
 			dependencies: [
@@ -123,10 +148,13 @@ let package = Package(
 				"SwiftUIHelpers",
 				"RepositoryClient",
 				.product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
-			]),
+			],
+			swiftSettings: settings
+		),
 		.testTarget(
 			name: "PokemonDetailsFeatureTests",
-			dependencies: ["PokemonDetailsFeature"]
+			dependencies: ["PokemonDetailsFeature"],
+			swiftSettings: settings
 		),
 		.target(
 			name: "PokemonsListFeature",
@@ -135,7 +163,9 @@ let package = Package(
 				"SwiftUIHelpers",
 				"RepositoryClient",
 				.product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
-			]),
+			],
+			swiftSettings: settings
+		),
 		.target(
 			name: "RepositoryClient",
 			dependencies: [
@@ -145,24 +175,31 @@ let package = Package(
 				"Mocks",
 				.product(name: "Dependencies", package: "swift-dependencies"),
 				.product(name: "DependenciesMacros", package: "swift-dependencies"),
-			]
+			],
+			swiftSettings: settings
 		),
 		.target(
 			name: "SearchFeature",
 			dependencies: [
 				.product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
-			]),
+			],
+			swiftSettings: settings
+		),
 		.target(
 			name: "SwiftUIHelpers",
 			dependencies: [
 				"Mocks",
 				"Models",
 				.product(name: "SDWebImageSwiftUI", package: "SDWebImageSwiftUI"),
-			]),
+			],
+			swiftSettings: settings
+		),
 		.target(
 			name: "TicketsFeature",
 			dependencies: [
 				.product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
-			]),
+			],
+			swiftSettings: settings
+		),
 	]
 )

@@ -8,10 +8,10 @@ import PokemonDetailsFeature
 import PokemonsListFeature
 
 @Reducer
-public struct HomeFeature {
+public struct HomeFeature : Sendable {
 
-	@Reducer(state: .equatable)
-	public enum Path {
+	@Reducer(state: .equatable, .sendable, action: .sendable)
+	public enum Path: Sendable {
 		case eventDetails(EventDetailsFeature)
 		case pokemonDetails(PokemonDetailsFeature)
 	}
@@ -48,7 +48,7 @@ public struct HomeFeature {
 	}
 
 	@CasePathable
-	public enum Action {
+	public enum Action : Sendable {
 		case topBar(HomeTopBarFeature.Action)
 		case featuredEvent(FeaturedEventFeature.Action)
 		case events(EventsListFeature.Action)

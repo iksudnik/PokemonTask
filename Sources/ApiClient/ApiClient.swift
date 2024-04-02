@@ -5,8 +5,8 @@ import Models
 import Mocks
 
 @DependencyClient
-public struct ApiClient {
-	public var pokemon: (_ id: Pokemon.ID) async throws -> Pokemon
+public struct ApiClient: Sendable {
+	public var pokemon: @Sendable (_ id: Pokemon.ID) async throws -> Pokemon
 }
 
 extension ApiClient: TestDependencyKey {

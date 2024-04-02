@@ -3,7 +3,7 @@ import RepositoryClient
 import Models
 
 @Reducer
-public struct PokemonsListFeature {
+public struct PokemonsListFeature : Sendable {
 	@ObservableState
 	public struct State: Equatable {
 		public var pokemons: IdentifiedArrayOf<Pokemon>
@@ -14,13 +14,13 @@ public struct PokemonsListFeature {
 	}
 
 	@CasePathable
-	public enum Action {
+	public enum Action: Sendable {
 		case pokemonConnectButtonTapped(Pokemon)
 		case updatePokemon(Pokemon)
 		case delegate(Delegate)
 
 		@CasePathable
-		public enum Delegate {
+		public enum Delegate: Sendable {
 			case pokemonTapped(Pokemon)
 		}
 	}

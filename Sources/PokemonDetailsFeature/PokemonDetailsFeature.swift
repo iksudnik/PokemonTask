@@ -3,7 +3,7 @@ import Models
 import RepositoryClient
 
 @Reducer
-public struct PokemonDetailsFeature {
+public struct PokemonDetailsFeature : Sendable {
 
 	@ObservableState
 	public struct State: Equatable {
@@ -14,7 +14,7 @@ public struct PokemonDetailsFeature {
 		}
 	}
 
-	public enum Action {
+	public enum Action : Sendable {
 		case connectButtonTapped
 		case updatePokemon(Pokemon)
 	}

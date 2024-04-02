@@ -9,6 +9,7 @@ extension RepositoryClient: DependencyKey {
 		@Dependency(\.apiClient) var apiClient
 		@Dependency(\.databaseClient) var database
 
+		@Sendable 
 		func pokemons(for ids: Set<Pokemon.ID>) async throws -> [Pokemon] {
 			await withTaskGroup(of: Pokemon?.self) { group in
 				var pokemons: [Pokemon] = []

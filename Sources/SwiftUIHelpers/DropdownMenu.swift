@@ -52,7 +52,7 @@ public struct DropdownMenu<Item>: View where Item: CustomStringConvertible {
 							.padding(.vertical, 12)
 							.padding(.leading, 4)
 							.padding(.trailing, 16)
-							.background(.black.opacity(0.5))
+							.background(.background.opacity(0.5))
 							.fixedSize()
 							.transition(.opacity)
 						}

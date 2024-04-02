@@ -4,7 +4,7 @@ import SearchFeature
 import TicketsFeature
 
 @Reducer
-public struct AppFeature {
+public struct AppFeature: Sendable {
 
 	@ObservableState
 	public struct State: Equatable {
@@ -25,14 +25,14 @@ public struct AppFeature {
 	}
 
 	@CasePathable
-	public enum Action {
+	public enum Action: Sendable {
 		case selected(Selection)
 		case home(HomeFeature.Action)
 		case search(SearchFeature.Action)
 		case tickets(TicketsFeature.Action)
 	}
 
-	public enum Selection: Hashable {
+	public enum Selection: Hashable, Sendable {
 		case home
 		case search
 		case tickets

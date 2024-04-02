@@ -5,10 +5,10 @@ import Models
 import Mocks
 
 @DependencyClient
-public struct DatabaseClient {
-	public var pokemon: @MainActor (_ id: Pokemon.ID) async throws -> Pokemon?
-	public var savePokemon: @MainActor (Pokemon) async throws -> Void
-	public var updatePokemonIsConnected: @MainActor (_ isConnected: Bool, _ id: Pokemon.ID) async throws -> Void
+public struct DatabaseClient: Sendable {
+	public var pokemon: @MainActor @Sendable (_ id: Pokemon.ID) async throws -> Pokemon?
+	public var savePokemon: @MainActor @Sendable (Pokemon) async throws -> Void
+	public var updatePokemonIsConnected: @MainActor @Sendable (_ isConnected: Bool, _ id: Pokemon.ID) async throws -> Void
 }
 
 public enum DatabaseClientError: Error {

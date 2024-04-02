@@ -1,7 +1,7 @@
 import Foundation
 import Helpers
 
-public struct Pokemon: Decodable, Identifiable, Equatable {
+public struct Pokemon: Decodable, Identifiable, Equatable, Sendable {
 	public let id: Int32
 	public let name: String
 	public let height: Int32

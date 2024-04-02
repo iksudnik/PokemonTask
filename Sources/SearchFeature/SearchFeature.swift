@@ -4,12 +4,18 @@ import SwiftUI
 // MARK: - Reducer
 
 @Reducer
-public struct SearchFeature {
+public struct SearchFeature: Sendable {
 	public struct State: Equatable {
 		public init() {}
 	}
 
+	public enum Action: Sendable {}
+
 	public init() {}
+
+	public var body: some ReducerOf<Self> {
+		EmptyReducer()
+	}
 }
 
 // MARK: - View

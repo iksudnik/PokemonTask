@@ -4,7 +4,7 @@ import PokemonsListFeature
 import RepositoryClient
 
 @Reducer
-public struct EventDetailsFeature {
+public struct EventDetailsFeature : Sendable {
 	@ObservableState
 	public struct State: Equatable {
 		public var event: Event
@@ -21,7 +21,7 @@ public struct EventDetailsFeature {
 	}
 
 	@CasePathable
-	public enum Action {
+	public enum Action : Sendable {
 		case onTask
 		case pokemonsResponse(Result<[Pokemon], Error>)
 		case pokemons(PokemonsListFeature.Action)

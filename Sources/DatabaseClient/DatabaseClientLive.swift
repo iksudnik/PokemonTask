@@ -1,4 +1,4 @@
-import CoreData
+@preconcurrency import CoreData
 import Dependencies
 import Foundation
 import Models
@@ -8,6 +8,7 @@ open class PersistentContainer: NSPersistentContainer { }
 extension DatabaseClient: DependencyKey {
 
 	public static var liveValue: Self {
+
 		var viewContext: NSManagedObjectContext {
 			return persistentContainer.viewContext
 		}
@@ -41,7 +42,7 @@ extension DatabaseClient: DependencyKey {
 			},
 
 			savePokemon: { pokemon in
-				try await viewContext.perform {
+				try await viewContext.perform { @Sendable [viewContext] in
 					let entity = PokemonEntity(context: viewContext)
 					entity.update(from: pokemon)
 
@@ -59,7 +60,7 @@ extension DatabaseClient: DependencyKey {
 					throw DatabaseClientError.objectNotExists
 				}
 
-				try await viewContext.perform {
+				try await viewContext.perform { @Sendable [entity] in
 					entity.isConnected = isConnected
 					try viewContext.save()
 				}
@@ -67,6 +68,8 @@ extension DatabaseClient: DependencyKey {
 		)
 	}
 }
+
+extension PokemonEntity: @unchecked Sendable {}
 
 extension PokemonEntity {
 	func toPokemon() -> Pokemon {

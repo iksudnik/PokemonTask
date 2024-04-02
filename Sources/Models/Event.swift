@@ -1,6 +1,9 @@
 import SwiftUI
 
-public struct Event: Identifiable, Equatable {
+// Temporary fix
+extension DeveloperToolsSupport.ImageResource: @unchecked Sendable {}
+
+public struct Event: Identifiable, Equatable, Sendable {
 	public let id = UUID()
 	/// Here should be URL for remote resource
 	public let image: ImageResource
@@ -19,7 +22,7 @@ public struct Event: Identifiable, Equatable {
 }
 
 @dynamicMemberLookup
-public struct FeaturedEvent: Equatable {
+public struct FeaturedEvent: Equatable, Sendable {
 	public let featuredTitle: String
 	public let event: Event
 

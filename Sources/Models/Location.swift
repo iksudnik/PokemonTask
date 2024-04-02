@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Location: Equatable {
+public struct Location: Equatable, Sendable {
 	public let title: String
 
 	public init(title: String) {

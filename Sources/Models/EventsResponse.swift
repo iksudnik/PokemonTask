@@ -1,6 +1,6 @@
 import Foundation
 
-public struct EventsResponse {
+public struct EventsResponse: Sendable {
 	public let featuredEvent: FeaturedEvent
 	public let weaklyEvents: [Event]
 

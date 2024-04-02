@@ -2,7 +2,7 @@ import ComposableArchitecture
 import Models
 
 @Reducer
-public struct EventsListFeature {
+public struct EventsListFeature: Sendable {
 	@ObservableState
 	public struct State: Equatable {
 		public var events: IdentifiedArrayOf<Event>
@@ -12,14 +12,19 @@ public struct EventsListFeature {
 		}
 	}
 
-	public enum Action {
+	public enum Action: Sendable {
 		case delegate(Delegate)
 
 		@CasePathable
-		public enum Delegate {
+		public enum Delegate: Sendable {
 			case eventTapped(Event)
 		}
 	}
 
 	public init() {}
+
+	public var body: some ReducerOf<Self> {
+		EmptyReducer()
+	}
+
 }
