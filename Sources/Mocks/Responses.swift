@@ -2,9 +2,10 @@ import Foundation
 import Models
 
 public extension HomeResponse {
-	static let mock = Self(featuredEvent: EventsResponse.mock.featuredEvent,
+	static let mock = Self(locations: .mock,
+						   featuredEvent: EventsResponse.mock.featuredEvent,
 						   weaklyEvents: EventsResponse.mock.weaklyEvents,
-						   popularPokemons: [.bulbasaur, .charizard, .pidgeotto])
+						   popularPokemons: .mock)
 }
 
 

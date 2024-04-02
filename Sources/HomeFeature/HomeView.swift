@@ -15,13 +15,27 @@ public struct HomeView: View {
 		self.store = store
 	}
 
+	private let sideOffset: CGFloat = 12
+
 	public var body: some View {
 
 		NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
 			VStack {
-				HomeTopBarView(store: store.scope(state: \.topBar,
-												  action: \.topBar))
+				Group {
+					if store.loadingState == .idle {
+						HomeTopBarView(store: Store(
+							initialState: .init()) {
+									  EmptyReducer()
+								  })
+						.redacted(reason: .placeholder)
+					} else {
+						HomeTopBarView(store: store.scope(state: \.topBar,
+														  action: \.topBar))
+						.zIndex(1)
+					}
+				}
 				.padding(.bottom, 16)
+				.padding(.horizontal, sideOffset)
 
 				ScrollView {
 					VStack(spacing: 32) {
@@ -46,21 +60,27 @@ public struct HomeView: View {
 										})
 								}
 							}
+							.padding(.horizontal, sideOffset)
 							.redacted(reason: .placeholder)
 						} else {
 							if let store = store.scope(state: \.featuredEvent, action: \.featuredEvent) {
 								FeaturedEventView(store: store)
+									.padding(.horizontal, sideOffset)
 							}
 
 							if let store = store.scope(state: \.events, action: \.events) {
-								SectionView(title: "This Weak") {
-									EventsListView(store: store)
+								SectionView(title: "This Weak",
+											titleOffset: sideOffset) {
+									EventsListView(store: store,
+												   contentHorizontalPadding: sideOffset)
 								}
 							}
 
 							if let store = store.scope(state: \.pokemons, action: \.pokemons) {
-								SectionView(title: "Popular Pokemons") {
-									PokemonsListView(store: store)
+								SectionView(title: "Popular Pokemons",
+											titleOffset: sideOffset) {
+									PokemonsListView(store: store,
+													 contentHorizontalPadding: sideOffset)
 								}
 							}
 						}
@@ -69,7 +89,6 @@ public struct HomeView: View {
 				}
 				.scrollIndicators(.never)
 			}
-			.padding(.horizontal, 12)
 			.background(Color(.systemGray6))
 			.task {
 				store.send(.onTask)
@@ -94,6 +113,16 @@ public struct HomeView: View {
 			initialState: HomeFeature.State()
 		) {
 			HomeFeature()
+		}
+	)
+}
+
+#Preview("Loading") {
+	HomeView(
+		store: Store(
+			initialState: HomeFeature.State()
+		) {
+			EmptyReducer()
 		}
 	)
 }

@@ -38,8 +38,12 @@ public struct PokemonItemView: View {
 // MARK: - Previews
 
 #Preview(traits: .sizeThatFitsLayout) {
-	PokemonItemView(pokemon: .bulbasaur,
-					onConnectButtonTap: {})
+	Button(action: {
+
+	}) {
+		PokemonItemView(pokemon: .bulbasaur,
+						onConnectButtonTap: {})
+	}
 }
 
 #Preview("Loading", traits: .sizeThatFitsLayout) {

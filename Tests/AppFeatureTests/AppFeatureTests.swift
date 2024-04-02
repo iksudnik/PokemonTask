@@ -1,4 +1,5 @@
 import AppFeature
+import HomeFeature
 import Mocks
 import Models
 import ComposableArchitecture
@@ -7,7 +8,7 @@ import XCTest
 final class AppFeatureTests: XCTestCase {
 
 	@MainActor
-    func testTabs() async {
+	func testTabs() async {
 		let store = TestStore(initialState: AppFeature.State()) {
 			AppFeature()
 		}
@@ -26,12 +27,12 @@ final class AppFeatureTests: XCTestCase {
 		await store.send(.selected(.home)) {
 			$0.selection = .home
 		}
-    }
+	}
 
 	@MainActor
 	func testIntegration() async {
 		let homeResponse = HomeResponse.mock
-		
+
 		let store = TestStore(initialState: AppFeature.State()) {
 			AppFeature()
 		} withDependencies: {
@@ -78,5 +79,4 @@ final class AppFeatureTests: XCTestCase {
 			$0.home.path = StackState()
 		}
 	}
-
 }

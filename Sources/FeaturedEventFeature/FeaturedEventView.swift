@@ -12,7 +12,6 @@ public struct FeaturedEventView: View {
 
 	public var body: some View {
 		VStack(alignment: .leading) {
-
 			Color.secondary
 				.aspectRatio(1, contentMode: .fit)
 				.overlay {
@@ -37,7 +36,8 @@ public struct FeaturedEventView: View {
 				.foregroundStyle(.secondary)
 			}
 		}
-		.onTapGesture {
+		.contentShape(Rectangle())
+		.asButton() {
 			store.send(.delegate(.eventTapped(store.event.event)))
 		}
 	}

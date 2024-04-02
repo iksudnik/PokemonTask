@@ -17,8 +17,9 @@ public struct EventItemView: View {
 					Image(event.image)
 						.resizable()
 						.scaledToFill()
+						.clipped()
+
 				}
-				.clipped()
 				.cornerRadius(8)
 
 			VStack(alignment: .leading, spacing: 4) {
@@ -34,7 +35,7 @@ public struct EventItemView: View {
 			}
 			.padding(.vertical, 8)
 		}
-		.frame(maxHeight: .infinity, alignment: .top)
+		.contentShape(Rectangle())
 	}
 }
 
@@ -42,5 +43,7 @@ public struct EventItemView: View {
 
 #Preview {
 	EventItemView(event: .event1)
+		.asButton() {}
+		.frame(width: 200)
 }
 

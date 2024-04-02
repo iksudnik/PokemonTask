@@ -1,4 +1,5 @@
 import ComposableArchitecture
+import Mocks
 import SwiftUI
 import SwiftUIHelpers
 
@@ -11,20 +12,16 @@ public struct HomeTopBarView: View {
 
 	public var body: some View {
 		HStack {
-			HStack(spacing: 8) {
-				Image(systemName: "map")
+			if !store.locations.isEmpty {
+				HStack(spacing: 8) {
+					Image(systemName: "map")
 
-				Text("Kanto")
-					.font(.system(size: 20, weight: .semibold))
-					.padding(.bottom, 4)
-					.overlay(
-						Rectangle()
-							.frame(height: 2)
-							.foregroundColor(.primary),
-						alignment: .bottom
-					)
+					DropdownMenu(items: store.locations) { location in
+						store.send(.delegate(.locationSelected(location)))
+					}
+				}
+				.font(.system(size: 24))
 			}
-			.font(.system(size: 24))
 			Spacer()
 			if store.isLoggedIn {
 				Circle()
@@ -42,7 +39,7 @@ public struct HomeTopBarView: View {
 
 #Preview {
 	HomeTopBarView(store: Store(
-		initialState: HomeTopBarFeature.State()) {
+		initialState: HomeTopBarFeature.State(locations: .mock)) {
 			HomeTopBarFeature()
 		})
 }

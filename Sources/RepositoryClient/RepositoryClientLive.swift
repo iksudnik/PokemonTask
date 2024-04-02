@@ -39,12 +39,14 @@ extension RepositoryClient: DependencyKey {
 
 		return Self(
 			homeData: {
+				let locations = [Location].mock
 				let eventsResponse = EventsResponse.mock
 				let allPokemonIDs = eventsResponse.allPokemonIDs
 
 				let pokemons = try await pokemons(for: allPokemonIDs)
 
-				return .init(featuredEvent: eventsResponse.featuredEvent,
+				return .init(locations: locations,
+							 featuredEvent: eventsResponse.featuredEvent,
 							 weaklyEvents: eventsResponse.weaklyEvents,
 							 popularPokemons: pokemons.sorted(by: { $0.order < $1.order }))
 			},

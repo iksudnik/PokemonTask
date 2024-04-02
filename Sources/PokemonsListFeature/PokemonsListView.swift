@@ -1,12 +1,17 @@
 import ComposableArchitecture
+import Mocks
+import Models
 import SwiftUI
 import SwiftUIHelpers
 
 public struct PokemonsListView: View {
 	let store: StoreOf<PokemonsListFeature>
+	let contentHorizontalPadding: CGFloat
 
-	public init(store: StoreOf<PokemonsListFeature>) {
+	public init(store: StoreOf<PokemonsListFeature>,
+				contentHorizontalPadding: CGFloat = 12) {
 		self.store = store
+		self.contentHorizontalPadding = contentHorizontalPadding
 	}
 
 	private let spacing: CGFloat = 8
@@ -19,7 +24,7 @@ public struct PokemonsListView: View {
 									onConnectButtonTap: {
 						store.send(.pokemonConnectButtonTapped(pokemon))
 					})
-					.onTapGesture {
+					.asButton() {
 						store.send(.delegate(.pokemonTapped(pokemon)))
 					}
 					.containerRelativeFrame(.horizontal,
@@ -28,17 +33,20 @@ public struct PokemonsListView: View {
 											spacing: spacing)
 				}
 			}
+			.padding(.horizontal, contentHorizontalPadding)
 		}
 		.scrollIndicators(.never)
 	}
 }
+
 
 // MARK: - Previews
 
 #Preview(traits: .sizeThatFitsLayout) {
 	return PokemonsListView(
 		store: Store(
-			initialState: PokemonsListFeature.State()) {
+			initialState: PokemonsListFeature.State(
+				pokemons: .init(uniqueElements: HomeResponse.mock.popularPokemons))) {
 				PokemonsListFeature()
 			}
 	)

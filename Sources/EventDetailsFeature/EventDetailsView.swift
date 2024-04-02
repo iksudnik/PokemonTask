@@ -6,13 +6,15 @@ import PokemonsListFeature
 public struct EventDetailsView: View {
 	let store: StoreOf<EventDetailsFeature>
 
+	private let sideOffset: CGFloat = 12
+
 	public init(store: StoreOf<EventDetailsFeature>) {
 		self.store = store
 	}
 
 	public var body: some View {
 		ScrollView {
-			VStack(alignment: .leading) {
+			VStack(alignment: .leading, spacing: 16) {
 				Color.secondary
 					.aspectRatio(1, contentMode: .fit)
 					.overlay {
@@ -32,15 +34,16 @@ public struct EventDetailsView: View {
 					}
 					.font(.system(size: 16))
 					.foregroundStyle(.secondary)
+				}
+				.padding(.horizontal, sideOffset)
 
-					if let store = store.scope(state: \.pokemons, action: \.pokemons) {
-						SectionView(title: "Featured Pokemons") {
-							PokemonsListView(store: store)
-						}
-						.padding(.top, 16)
+				if let store = store.scope(state: \.pokemons, action: \.pokemons) {
+					SectionView(title: "Featured Pokemons",
+								titleOffset: sideOffset) {
+						PokemonsListView(store: store,
+										 contentHorizontalPadding: sideOffset)
 					}
 				}
-				.padding(.horizontal, 16)
 			}
 		}
 		.ignoresSafeArea(edges: .top)

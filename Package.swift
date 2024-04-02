@@ -106,6 +106,8 @@ let package = Package(
 		.target(
 			name: "HomeTopBarFeature",
 			dependencies: [
+				"Mocks",
+				"Models",
 				"SwiftUIHelpers",
 				.product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
 			]),

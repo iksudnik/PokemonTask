@@ -79,6 +79,7 @@ public struct HomeFeature {
 
 				switch result {
 				case let .success(response):
+					state.topBar.locations = response.locations
 					state.featuredEvent = .init(event: response.featuredEvent)
 					state.events = .init(events: .init(
 						uniqueElements: response.weaklyEvents
@@ -96,6 +97,8 @@ public struct HomeFeature {
 			case let .topBar(.delegate(delegateAction)):
 				switch delegateAction {
 				case .loginButtonTapped:
+					return .none
+				case .locationSelected:
 					return .none
 				}
 
