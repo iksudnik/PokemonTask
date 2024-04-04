@@ -4,8 +4,8 @@
 import PackageDescription
 
 let settings: [SwiftSetting] = [
-  .enableExperimentalFeature("StrictConcurrency"),
-  .enableExperimentalFeature("InferSendableFromCaptures")
+//  .enableExperimentalFeature("StrictConcurrency"),
+//  .enableExperimentalFeature("InferSendableFromCaptures")
 ]
 
 let package = Package(

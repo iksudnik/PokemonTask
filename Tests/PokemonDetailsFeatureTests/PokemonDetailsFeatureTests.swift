@@ -7,14 +7,14 @@ import XCTest
 final class PokemonDetailsFeatureTests: XCTestCase {
 
 	@MainActor
-    func testConnect() async {
+	func testConnect() async {
 		var pokemon = Pokemon.bulbasaur
 		pokemon.isConnected = true
 
 		let store = TestStore(initialState: PokemonDetailsFeature.State(pokemon: pokemon)) {
 			PokemonDetailsFeature()
 		} withDependencies: {
-			$0.repository.updatePokemonIsConnected = { _, _ in }
+			$0.repository.updatePokemonIsConnected = { @Sendable _, _ in }
 		}
 
 		await store.send(.connectButtonTapped) // State not changed
@@ -29,5 +29,5 @@ final class PokemonDetailsFeatureTests: XCTestCase {
 			$0.pokemon.isConnected = true // State changed
 		}
 
-    }
+	}
 }
